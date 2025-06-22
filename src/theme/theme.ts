@@ -6,6 +6,12 @@ import {
 
 const customConfig = defineConfig({
   globalCss: {
+     "html, body, #root": {
+      height: "100%",
+      width: "100%",
+      margin: 0,
+      padding: 0,
+    },
     "*::placeholder": {
       opacity: 1,
       color: "fg.subtle",
