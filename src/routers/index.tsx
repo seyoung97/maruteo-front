@@ -1,12 +1,22 @@
+import { MainLayout } from '@/components/layout/MainLayout';
+import { PageLayout } from '@/components/layout/PageLayout';
+import { ChatPage } from '@/pages/ChatPage';
+import { ClassListPage } from '@/pages/ClassListPage';
+import HomePage from '@/pages/HomePage';
 import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
-import HomePage from '../pages/HomePage';
 
-const router =(
-  <Route>
-    <Route index element={<HomePage/>}/>
-  </Route>
-)
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <>
+      <Route element={<MainLayout />}>
+        <Route index element={<HomePage />} />
+      </Route>
+      <Route element={<PageLayout/>}>
+        <Route path="class-list" element={<ClassListPage />} />
+        <Route path='chat' element={<ChatPage/>}/>
+      </Route>
+    </>
+  )
+);
 
-const rootRouter = createBrowserRouter(createRoutesFromElements(router));
-
-export default rootRouter;
+export default router;
