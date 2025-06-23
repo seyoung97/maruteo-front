@@ -4,7 +4,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import { Provider } from './components/ui/provider.tsx'
-import './index.css'
+import { GlobalStyles } from './theme/GlobalStyles.tsx'
 
 const queryClient = new QueryClient();
 
@@ -13,6 +13,7 @@ createRoot(document.getElementById('root')!).render(
     <QueryClientProvider client={queryClient}>
       <JotaiProvider>
         <Provider>
+          <GlobalStyles/>
           <App />
         </Provider>
       </JotaiProvider>

@@ -2,7 +2,14 @@ import {
   createSystem,
   defaultConfig,
   defineConfig,
-} from "@chakra-ui/react"
+} from "@chakra-ui/react";
+
+
+const config = {
+  ...defaultConfig,
+  initialColorMode: "light", 
+  useSystemColorMode: false, 
+};
 
 const customConfig = defineConfig({
   globalCss: {
@@ -35,7 +42,30 @@ const customConfig = defineConfig({
         secondary: { value: "#22c55e" },
       },
     },
+    recipes: {
+      button: {
+        base: {
+          _focus: {
+            boxShadow: "none",
+            outline: "none",
+          },
+          _hover: {
+            borderColor: "inherit",
+          },
+        },
+        variants: {
+          ghost: {
+            _hover: {
+              bg: "transparent",
+            },
+            _focus: {
+              boxShadow: "none",
+            },
+          },
+        }
+      }
+    },
   },
 })
 
-export const system = createSystem(defaultConfig, customConfig)
+export const system = createSystem(config, customConfig)
