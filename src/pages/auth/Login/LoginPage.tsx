@@ -1,10 +1,10 @@
+import { ValidationInput } from '@/components/ui/ValidationInput';
 import {
   Box,
   Button,
   Container,
   Heading,
   HStack,
-  Input,
   Text,
   VStack
 } from '@chakra-ui/react';
@@ -13,9 +13,16 @@ import { useState } from 'react';
 export function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Validation 함수들
+  const validateEmail = (value: string) => {
+    if (!value) return undefined;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(value)) return '올바른 이메일 형식을 입력하세요';
+    return undefined;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,94 +67,31 @@ export function LoginPage() {
         </VStack>
         
         {/* 로그인 폼 */}
-        <Box
-          w="full"
-          p="10"
-        >
+        <Box w="full" p="10">
           <form onSubmit={handleSubmit}>
             <VStack gap="6">
-              {/* 이메일 입력 */}
-              <Box w="full">
-                <label 
-                  htmlFor="email" 
-                  style={{ 
-                    display: 'block', 
-                    marginBottom: '8px', 
-                    fontSize: '14px',
-                    fontWeight: '500',
-                    color: '#374151'
-                  }}
-                >
-                  이메일
-                </label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="your@email.com"
-                  required
-                  w="full"
-                  h="48px"
-                  fontSize="16px" // iOS에서 줌 방지
-                  borderRadius="lg"
-                  border="1px solid"
-                  borderColor="gray.200"
-                  _focus={{
-                    borderColor: "blue.500",
-                    boxShadow: "0 0 0 1px #3182ce"
-                  }}
-                />
-              </Box>
-              
-              {/* 비밀번호 입력 */}
-              <Box w="full">
-                <label 
-                  htmlFor="password" 
-                  style={{ 
-                    display: 'block', 
-                    marginBottom: '8px', 
-                    fontSize: '14px',
-                    fontWeight: '500',
-                    color: '#374151'
-                  }}
-                >
-                  비밀번호
-                </label>
-                <HStack w="full">
-                  <Input
-                    id="password"
-                    type={showPassword ? 'text' : 'password'}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="비밀번호를 입력하세요"
-                    required
-                    flex="1"
-                    h="48px"
-                    fontSize="16px" // iOS에서 줌 방지
-                    borderRadius="lg"
-                    border="1px solid"
-                    borderColor="gray.200"
-                    _focus={{
-                      borderColor: "blue.500",
-                      boxShadow: "0 0 0 1px #3182ce"
-                    }}
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    onClick={() => setShowPassword(!showPassword)}
-                    h="48px"
-                    w="48px"
-                    p="0"
-                    borderRadius="lg"
-                    color="gray.500"
-                    _hover={{ bg: "gray.100" }}
-                  >
-                    {showPassword ? '숨기기' : '보기'}
-                  </Button>
-                </HStack>
-              </Box>
+              {/* ValidationInput 컴포넌트들 */}
+              <ValidationInput
+                id="email"
+                label="이메일"
+                type="email"
+                value={email}
+                onChange={setEmail}
+                placeholder="your@email.com"
+                required
+                validation={validateEmail}
+              />
+
+              <ValidationInput
+                id="password"
+                label="비밀번호"
+                type="password"
+                value={password}
+                onChange={setPassword}
+                placeholder="비밀번호를 입력하세요"
+                required
+                showPasswordToggle
+              />
               
               {/* 로그인 상태 유지 & 비밀번호 찾기 */}
               <HStack justify="space-between" w="full">
@@ -247,7 +191,7 @@ export function LoginPage() {
               계정이 없으신가요?
             </Text>
             <a 
-              href="/auth/register" 
+              href="/register" 
               style={{ 
                 color: '#3182ce', 
                 fontSize: '14px', 
