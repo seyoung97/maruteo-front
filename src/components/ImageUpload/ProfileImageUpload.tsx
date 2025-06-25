@@ -23,16 +23,41 @@ export function ProfileImageUpload({
 }: ProfileImageUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        onChange(e.target?.result as string);
-      };
-      reader.readAsDataURL(file);
+  // const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onload = (e) => {
+  //       onChange(e.target?.result as string);
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const file = event.target.files?.[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', 'profile_image'); // 클라우디너리에서 설정한 preset 이름
+
+  try {
+    const res = await fetch('https://api.cloudinary.com/v1_1/dthkktchm/image/upload', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const data = await res.json();
+    if (data.secure_url) {
+      onChange(data.secure_url); // 업로드된 이미지 URL 전달
+    } else {
+      console.error('Cloudinary upload failed:', data);
     }
-  };
+  } catch (err) {
+    console.error('Upload error:', err);
+  }
+};
 
   const handleImageClick = () => {
     if (!disabled) {
