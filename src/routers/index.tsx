@@ -6,7 +6,13 @@ import ClassDetailPage from '@/pages/ClassDetailPage/ClassDetailPage';
 import { ClassExploreCategoryPage, ClassExploreClassListPage, ClassExploreGiverListPage, ClassExplorePage } from '@/pages/ClassExplorePage';
 import { GiverDetailPage } from '@/pages/GiverDetailPage';
 import HomePage from '@/pages/HomePage';
-import OneMonthMainPage from '@/pages/OneMonthPage/OneMonthMainPage';
+import {
+  OneMonthMainPage,
+  OneMonthApplyPage,
+  OneMonthTalentRegisterPage,
+  OneMonthWantTalentPage,
+  OneMonthCompletePage
+} from '@/pages/OneMonthPage';
 import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
 
 const router = createBrowserRouter(
@@ -26,6 +32,10 @@ const router = createBrowserRouter(
         <Route path="class-explore/:category/givers" element={<ClassExploreGiverListPage />} handle={{ title: ":category 재능 기부자" }} />
         <Route path="class-explore/:category/classes" element={<ClassExploreClassListPage />} handle={{ title: ":category 수업 목록" }} />
         <Route path="one-month" element={<OneMonthMainPage />} handle={{ title: "의성 한 달 살이" }} />
+        <Route path="one-month/apply" element={<OneMonthApplyPage />} handle={{ title: "신청하기" }} />
+        <Route path="one-month/talent" element={<OneMonthTalentRegisterPage />} handle={{ title: "재능 등록" }} />
+        <Route path="one-month/want-talent" element={<OneMonthWantTalentPage />} handle={{ title: "배우고 싶은 재능 등록" }} />
+        <Route path="one-month/complete" element={<OneMonthCompletePage />} handle={{ title: "완료" }} />
       </Route>
       {/* Chat 관련 페이지들은 상단바/하단바 없이 풀스크린 */}
       <Route path='chat' element={<ChatPage/>}/>

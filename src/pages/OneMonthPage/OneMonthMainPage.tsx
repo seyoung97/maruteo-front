@@ -1,7 +1,9 @@
 // 한달살기 메인페이지 - 시안 스타일 적용
 import { Box, Button, Text } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 
 const OneMonthMainPage = () => {
+  const navigate = useNavigate();
   return (
     <Box
       maxW="480px"
@@ -12,6 +14,7 @@ const OneMonthMainPage = () => {
       boxShadow="md"
       position="relative"
       px={0}
+      bg="white"
       style={{
         backgroundImage: 'url(/one-month-main.png)',
         backgroundSize: 'cover',
@@ -42,15 +45,16 @@ const OneMonthMainPage = () => {
       {/* 하단 버튼 (배경 없음) */}
       <Box position="absolute" left={0} right={0} bottom={80} zIndex={2} display="flex" justifyContent="center">
         <Button
-          bg="#C7EAB6"
-          color="#2B5B2E"
+          bg="#DFF5DF"
+          color="#226B3A"
           fontWeight="bold"
           fontSize="lg"
           borderRadius="2xl"
           px={12}
           py={6}
-          _hover={{ bg: '#B2DCA0' }}
+          _hover={{ bg: '#c8eac8' }}
           boxShadow="md"
+          onClick={() => navigate('/one-month/apply')}
         >
           신청하기
         </Button>

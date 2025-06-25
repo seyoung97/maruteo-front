@@ -83,6 +83,7 @@ export function ValidationInput({
             borderRadius="lg"
             border="1px solid"
             borderColor={displayError ? "red.300" : "gray.200"}
+            bg="white"
             _focus={{
               borderColor: displayError ? "red.500" : "blue.500",
               boxShadow: displayError 
@@ -119,6 +120,7 @@ export function ValidationInput({
           borderRadius="lg"
           border="1px solid"
           borderColor={displayError ? "red.300" : "gray.200"}
+          bg="white"
           _focus={{
             borderColor: displayError ? "red.500" : "blue.500",
             boxShadow: displayError 
