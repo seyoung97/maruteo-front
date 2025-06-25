@@ -55,7 +55,7 @@ export function ProfileImageUpload({
           w={size}
           h={size}
           borderRadius="full"
-          bg="green.500"
+          bg="green.300"
           display="flex"
           alignItems="center"
           justifyContent="center"
