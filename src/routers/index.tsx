@@ -1,6 +1,5 @@
 import { MainLayout } from '@/components/layout/MainLayout';
 import { PageLayout } from '@/components/layout/PageLayout';
-import { AllClassListPage } from '@/pages/AllClassListPage';
 import { LoginPage, ProfilePage, RegisterPage } from '@/pages/auth';
 import { ChatPage, ChatConversationPage } from '@/pages/ChatPage';
 import ClassDetailPage from '@/pages/ClassDetailPage/ClassDetailPage';
@@ -20,14 +19,13 @@ const router = createBrowserRouter(
         <Route index element={<HomePage />} />
       </Route>
       <Route element={<PageLayout/>}>
-        <Route path="class-list/all" element={<AllClassListPage />} handle={{ title: "수업 전체 목록" }} />
         <Route path="giver/:id" element={<GiverDetailPage />} handle={{ title: "한식 재능 기부자" }} />
         <Route path="class/:id" element={<ClassDetailPage />} handle={{ title: "수업 상세 안내" }} />
-        <Route path="class-explore" element={<ClassExplorePage />} handle={{ title: "한식" }} />
-        <Route path="class-explore/:category" element={<ClassExploreCategoryPage />} handle={{ title: "한식" }} />
-        <Route path="class-explore/:category/givers" element={<ClassExploreGiverListPage />} handle={{ title: "한식 재능 기부자" }} />
-        <Route path="class-explore/:category/classes" element={<ClassExploreClassListPage />} handle={{ title: "수업 전체 목록" }} />
-        <Route path="one-month" element={<OneMonthMainPage />} />
+        <Route path="class-explore" element={<ClassExplorePage />} handle={{ title: "재능 탐색" }} />
+        <Route path="class-explore/:category" element={<ClassExploreCategoryPage />} handle={{ title: ":category" }} />
+        <Route path="class-explore/:category/givers" element={<ClassExploreGiverListPage />} handle={{ title: ":category 재능 기부자" }} />
+        <Route path="class-explore/:category/classes" element={<ClassExploreClassListPage />} handle={{ title: ":category 수업 목록" }} />
+        <Route path="one-month" element={<OneMonthMainPage />} handle={{ title: "의성 한 달 살이" }} />
       </Route>
       {/* Chat 관련 페이지들은 상단바/하단바 없이 풀스크린 */}
       <Route path='chat' element={<ChatPage/>}/>

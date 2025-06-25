@@ -31,8 +31,8 @@ const dummyClasses = [
 const dummyGivers = [
   {
     id: 1,
-    name: '김춘자',
-    username: '@chunja',
+    name: '김민희',
+    username: '@minii',
     thumbnail: '/img1.jpg',
     badge: '우수 기부자',
     intro: '한식 재능 기부자',
@@ -105,25 +105,39 @@ const ClassDetailPage = () => {
           <GarlicIcon style={{ fontSize: '1.2em' }} />
           <Text>{cls.garlic}</Text>
           <Button
-            size="xs"
-            variant={liked ? 'solid' : 'outline'}
-            colorPalette="yellow"
+            size="sm"
+            px={3}
+            py={0.5}
+            borderRadius="md"
+            fontWeight="semibold"
+            fontSize="sm"
+            bg={liked ? 'green.500' : 'gray.200'}
+            color={liked ? 'white' : 'green.800'}
+            _hover={{ bg: liked ? 'green.600' : 'gray.300' }}
+            boxShadow="md"
             onClick={() => setLiked(l => !l)}
           >
-            <GarlicIcon style={{ fontSize: '1em' }} />
-            {liked ? '찜 취소' : '찜하기'}
+            <HStack gap={0.5} justify="center">
+              <GarlicIcon style={{ color: liked ? 'white' : '#6B8E23', fontSize: '0.9em' }} />
+              <Text fontWeight="semibold">{liked ? '찜 취소' : '찜하기'}</Text>
+            </HStack>
           </Button>
         </HStack>
       </Flex>
       {giver && (
-        <Flex align="center" gap={2} mb={4}>
-          <Image src={giver.thumbnail} w="40px" h="40px" borderRadius="full" />
-          <Box>
-            <Text fontWeight="bold">{giver.name}</Text>
-            <Text fontSize="sm" color="gray.500">{giver.intro}</Text>
+        <Box bg="green.50" borderRadius="xl" p={3} mb={4} boxShadow="sm" display="flex" alignItems="center" gap={3}>
+          <Image src={giver.thumbnail} w="48px" h="48px" borderRadius="full" boxShadow="xs" />
+          <Box flex={1} minW={0}>
+            <Text fontWeight="bold" fontSize="md" color="green.900">{giver.name} <Badge colorPalette="green" fontSize="sm" px={2} py={0.5} ml={1}>청년기부자</Badge></Text>
+            <Text fontSize="sm" color="green.700" fontWeight="bold">{giver.username}</Text>
+            <Text fontSize="sm" color="gray.700">{giver.intro}</Text>
           </Box>
-          {isBadge && <Badge colorPalette="green" ml={2}>{giver.badge}</Badge>}
-        </Flex>
+          {isBadge && (
+            <Box as="span" ml={2} px={2} py={0.5} borderRadius="lg" bg="#BFF5CC" color="#17643B" fontWeight="bold" fontSize="sm" display="inline-flex" alignItems="center" gap={1}>
+              <span role="img" aria-label="medal">🏅</span> 우수기부자
+            </Box>
+          )}
+        </Box>
       )}
       <Button w="full" colorPalette="green" size="lg" mb={4}>수업 신청하기</Button>
       <Box mb={2}>

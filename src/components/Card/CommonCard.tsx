@@ -9,6 +9,7 @@ interface CommonCardProps {
   rating?: number;
   badgeText?: string;
   onClick?: () => void;
+  isExcellentBadge?: boolean;
 }
 
 const CommonCard = ({
@@ -19,6 +20,7 @@ const CommonCard = ({
   rating,
   badgeText,
   onClick,
+  isExcellentBadge,
 }: CommonCardProps) => {
   return (
     <Box
@@ -32,9 +34,31 @@ const CommonCard = ({
       onClick={onClick}
       p={3}
       w="full"
-      maxW="320px"
+      position="relative"
     >
-      <Image src={thumbnail} alt={title} borderRadius="md" w="100%" h="160px" objectFit="cover" mb={3} />
+      <Box position="relative" mb={3}>
+        <Image src={thumbnail} alt={title} borderRadius="md" w="100%" h="160px" objectFit="cover" />
+        {isExcellentBadge && (
+          <Badge
+            position="absolute"
+            top={2}
+            left={2}
+            colorPalette="green"
+            fontWeight="bold"
+            fontSize="0.85em"
+            px={2}
+            py={1}
+            borderRadius="md"
+            zIndex={1}
+            bg="green.200"
+            display="flex"
+            alignItems="center"
+            gap={1}
+          >
+            🏅 우수기부자
+          </Badge>
+        )}
+      </Box>
       <Flex align="center" mb={1} gap={2}>
         <Text fontWeight="bold" fontSize="lg" lineClamp={1}>{title}</Text>
         {badgeText && (

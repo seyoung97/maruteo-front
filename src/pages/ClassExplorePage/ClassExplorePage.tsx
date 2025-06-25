@@ -1,71 +1,95 @@
-import { CommonCard } from '@/components/Card';
-import { CommonSelect } from '@/components/Select';
-import { Box, Heading, SimpleGrid } from '@chakra-ui/react';
+import { Box, VStack, Button, HStack, Input, InputGroup } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-// 재능탐색 메인 페이지 - 카테고리 진입, 분기
-
-// 더미 데이터 (AllClassListPage와 동일)
-const dummyClasses = [
-  { id: 1, title: '된장국 클래스', thumbnail: '/class1.jpg', garlic: 120, rating: 4.7, badge: '청년', type: 'youth' },
-  { id: 2, title: '김치찌개 클래스', thumbnail: '/class2.jpg', garlic: 98, rating: 4.5, badge: '청년', type: 'youth' },
-  { id: 3, title: '잡채 클래스', thumbnail: '/class3.jpg', garlic: 80, rating: 4.3, badge: '청년', type: 'youth' },
-  { id: 4, title: '불고기 클래스', thumbnail: '/class4.jpg', garlic: 60, rating: 4.1, badge: '청년', type: 'youth' },
-  { id: 5, title: '청국장 클래스', thumbnail: '/class5.jpg', garlic: 50, rating: 3.8, badge: '어르신', type: 'senior' },
+const mainCategories = [
+  { key: '요리', subs: ['한식', '중식', '일식', '양식', '기타'] },
+  { key: 'IT', subs: ['스마트폰 사용', '배달앱 사용', '인터넷 뱅킹', '키오스크 사용법', '보이스 피싱', '기타'] },
+  { key: '악기', subs: ['피아노', '기타', '드럼', '플루트', '기타'] },
+  { key: '운동', subs: ['걷기', '요가', '스트레칭', '탁구', '기타'] },
+  { key: '글쓰기', subs: ['일기', '편지', '시', '수필', '기타'] },
+  { key: '미술', subs: ['수채화', '색연필화', '캘리그라피', '종이접기', '기타'] },
+  { key: '농업', subs: ['텃밭 가꾸기', '화분 관리', '작물 재배', '기타'] },
 ];
-
-const filterOptions = [
-  { label: '최신순', value: 'latest' },
-  { label: '인기순', value: 'popular' },
-  { label: '찜 많은순', value: 'garlic' },
-  { label: '별점 높은 순', value: 'rating' },
-];
-
-// 예시: 로그인 유저 타입 (실제론 context 등에서 받아야 함)
-const userType: 'senior' | 'youth' = 'senior';
 
 const ClassExplorePage = () => {
-  const [sort, setSort] = useState('latest');
+  const [selectedMain, setSelectedMain] = useState(mainCategories[0].key);
+  const [search, setSearch] = useState('');
   const navigate = useNavigate();
 
-  // 유저 타입에 따라 보여줄 데이터 필터링
-  const filteredClasses = dummyClasses.filter(
-    c => userType === 'senior' ? c.type === 'youth' : c.type === 'senior'
+  // 검색어로 큰 범주와 세부 재능 모두 필터링
+  const filteredMain = mainCategories.filter(cat =>
+    cat.key.includes(search) || cat.subs.some(sub => sub.includes(search))
   );
-
-  // 정렬 함수
-  const sortData = (data: any[], sortKey: string) => {
-    switch (sortKey) {
-      case 'garlic': return [...data].sort((a, b) => b.garlic - a.garlic);
-      case 'rating': return [...data].sort((a, b) => b.rating - a.rating);
-      case 'popular': return [...data].sort((a, b) => b.garlic - a.garlic); // 임시: 인기순=찜순
-      default: return data;
-    }
-  };
+  const selected = filteredMain.find(cat => cat.key === selectedMain) || filteredMain[0];
+  const filteredSubs = selected
+    ? selected.subs.filter(sub => sub.includes(search))
+    : [];
 
   return (
-    <Box p={4}>
-      <Heading size="md" mb={2}>수업 전체 목록</Heading>
-      <CommonSelect
-        options={filterOptions}
-        value={sort}
-        onChange={v => setSort(String(v))}
-        placeholder="정렬 기준 선택"
-      />
-      <SimpleGrid columns={2} gap={4} mt={4}>
-        {sortData(filteredClasses, sort).map(cls => (
-          <CommonCard
-            key={cls.id}
-            thumbnail={cls.thumbnail}
-            title={cls.title}
-            garlicCount={cls.garlic}
-            rating={cls.rating}
-            badgeText={cls.badge}
-            onClick={() => navigate(`/class/${cls.id}`)}
-          />
-        ))}
-      </SimpleGrid>
+    <Box minH="100vh" bg="#fff" py={4} px={2}>
+      {/* 검색창 */}
+      <InputGroup mb={4} w="100%">
+        <Input
+          placeholder="빠르게 찾기"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          bg="#d6f5d6"
+          borderRadius="full"
+          fontWeight="bold"
+          fontSize="lg"
+          h="48px"
+          pl={6}
+          _placeholder={{ color: 'green.700', fontWeight: 'bold' }}
+        />
+      </InputGroup>
+      {/* 2단 컬럼: 좌측 큰 범주, 우측 세부 재능 */}
+      <HStack align="start" gap={8} w="100%" maxW="400px" mx="auto" mt={8}>
+        {/* 왼쪽: 큰 범주 */}
+        <VStack align="stretch" gap={0} w="140px">
+          {filteredMain.map(cat => (
+            <Button
+              key={cat.key}
+              variant="ghost"
+              justifyContent="flex-start"
+              bg={selectedMain === cat.key ? 'gray.100' : 'transparent'}
+              fontWeight={selectedMain === cat.key ? 'bold' : 'normal'}
+              color="black"
+              borderRadius="md"
+              h="40px"
+              px={4}
+              onClick={() => setSelectedMain(cat.key)}
+              _hover={{ bg: 'gray.200' }}
+            >
+              {cat.key}
+            </Button>
+          ))}
+        </VStack>
+        {/* 오른쪽: 세부 재능 */}
+        <VStack align="stretch" gap={0} w="140px">
+          {filteredSubs.length ? (
+            filteredSubs.map(sub => (
+              <Button
+                key={sub}
+                variant="ghost"
+                justifyContent="flex-start"
+                color="black"
+                borderRadius="md"
+                h="40px"
+                px={4}
+                onClick={() => navigate(`/class-explore/${sub}`)}
+                _hover={{ bg: 'gray.100' }}
+              >
+                {sub}
+              </Button>
+            ))
+          ) : (
+            <Box color="gray.400" h="40px" px={4} display="flex" alignItems="center">
+              세부 재능 없음
+            </Box>
+          )}
+        </VStack>
+      </HStack>
     </Box>
   );
 };
