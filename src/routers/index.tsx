@@ -1,10 +1,11 @@
 import { MainLayout } from '@/components/layout/MainLayout';
 import { PageLayout } from '@/components/layout/PageLayout';
-import { ChatPage } from '@/pages/ChatPage';
 import { AllClassListPage } from '@/pages/AllClassListPage';
-import { GiverDetailPage } from '@/pages/GiverDetailPage';
+import { LoginPage, ProfilePage, RegisterPage } from '@/pages/auth';
+import { ChatPage } from '@/pages/ChatPage';
 import ClassDetailPage from '@/pages/ClassDetailPage/ClassDetailPage';
-import { ClassExplorePage, ClassExploreCategoryPage, ClassExploreGiverListPage, ClassExploreClassListPage } from '@/pages/ClassExplorePage';
+import { ClassExploreCategoryPage, ClassExploreClassListPage, ClassExploreGiverListPage, ClassExplorePage } from '@/pages/ClassExplorePage';
+import { GiverDetailPage } from '@/pages/GiverDetailPage';
 import HomePage from '@/pages/HomePage';
 import OneMonthMainPage from '@/pages/OneMonthPage/OneMonthMainPage';
 import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
@@ -12,6 +13,9 @@ import { createBrowserRouter, createRoutesFromElements, Route } from 'react-rout
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/profile" element={<ProfilePage />} />
       <Route element={<MainLayout />}>
         <Route index element={<HomePage />} />
       </Route>

@@ -1,9 +1,7 @@
+import { CommonCard } from '@/components/Card';
+import { GarlicIcon, StarRating } from '@/components/Icon';
+import { Avatar, Badge, Box, Button, Flex, Heading, HStack, SimpleGrid, Text } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
-import { Box, Heading, Text, Badge, Flex, HStack, SimpleGrid, Button } from '@chakra-ui/react';
-import { Avatar } from '@chakra-ui/react';
-import GarlicIcon from '@/components/common/GarlicIcon';
-import StarRating from '@/components/common/StarRating';
-import CommonCard from '@/components/common/CommonCard';
 
 // 기부자 상세 페이지 - 기부자 정보, 수업 목록, 뱃지 등 표시
 

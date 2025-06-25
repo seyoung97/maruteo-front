@@ -1,6 +1,5 @@
-import { Box, Flex, Image, Text, Badge, HStack } from '@chakra-ui/react';
-import GarlicIcon from './GarlicIcon';
-import StarRating from './StarRating';
+import { Badge, Box, Flex, HStack, Image, Text } from '@chakra-ui/react';
+import { GarlicIcon, StarRating } from '../Icon';
 
 interface CommonCardProps {
   thumbnail: string;

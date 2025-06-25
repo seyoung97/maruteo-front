@@ -1,9 +1,8 @@
-import { useParams } from 'react-router-dom';
+import { GarlicIcon, StarRating } from '@/components/Icon';
+import { Badge, Box, Button, Flex, Heading, HStack, Image, Text } from '@chakra-ui/react';
 import { useState } from 'react';
-import { Box, Heading, Text, Flex, HStack, Badge, Button, Image } from '@chakra-ui/react';
 import { FaPlay } from 'react-icons/fa';
-import GarlicIcon from '@/components/common/GarlicIcon';
-import StarRating from '@/components/common/StarRating';
+import { useParams } from 'react-router-dom';
 
 // 더미 데이터: 수업, 기부자(뱃지 조건 포함)
 const dummyClasses = [

@@ -1,8 +1,8 @@
-import { useParams } from 'react-router-dom';
+import { CommonCard } from '@/components/Card';
+import { CommonSelect } from '@/components/Select';
+import { Box, Heading, Input, SimpleGrid, Text } from '@chakra-ui/react';
 import { useState } from 'react';
-import { Box, Heading, SimpleGrid, Input, Text } from '@chakra-ui/react';
-import CommonCard from '@/components/common/CommonCard';
-import CommonSelect from '@/components/common/CommonSelect';
+import { useParams } from 'react-router-dom';
 
 const filterOptions = [
   { label: '최신순', value: 'latest' },
