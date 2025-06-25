@@ -1,5 +1,5 @@
-import CommonCard from '@/components/common/CommonCard';
-import CommonSelect from '@/components/common/CommonSelect';
+import { CommonCard } from '@/components/Card';
+import { CommonSelect } from '@/components/Select';
 import { Box, Heading, Input, SimpleGrid } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';

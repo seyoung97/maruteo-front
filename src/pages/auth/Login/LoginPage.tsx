@@ -1,4 +1,4 @@
-import { ValidationInput } from '@/components/ui/ValidationInput';
+import { ValidationInput } from '@/components/Input';
 import {
   Box,
   Button,

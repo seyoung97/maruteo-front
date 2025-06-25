@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { CommonCard } from '@/components/Card';
+import { CommonSelect } from '@/components/Select';
 import { Box, Heading, SimpleGrid } from '@chakra-ui/react';
-import CommonCard from '@/components/common/CommonCard';
-import CommonSelect from '@/components/common/CommonSelect';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 // 더미 데이터 예시

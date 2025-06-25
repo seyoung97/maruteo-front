@@ -1,4 +1,4 @@
-import Footer from "@/components/shared/Footer/Footer";
+import Footer from "@/components/layout/shared/Footer/Footer";
 import { Box, Container } from "@chakra-ui/react";
 import { Outlet, useMatches } from "react-router-dom";
 import PageHeader from "./PageHeader";

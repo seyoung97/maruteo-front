@@ -1,4 +1,4 @@
-import { ValidationInput } from '@/components/ui/ValidationInput';
+import { ValidationInput, ValidationRadio } from '@/components/Input';
 import {
   Box,
   Button,
@@ -106,64 +106,17 @@ export function RegisterPage() {
           <form onSubmit={handleSubmit}>
             <VStack gap="6">
               {/* 사용자 유형 선택 */}
-              <Box w="full">
-                <label 
-                  style={{ 
-                    display: 'block', 
-                    marginBottom: '12px', 
-                    fontSize: '14px',
-                    fontWeight: '500',
-                    color: '#374151'
-                  }}
-                >
-                  사용자 유형
-                  <span style={{ color: '#ef4444', marginLeft: '2px' }}>*</span>
-                </label>
-                <HStack gap="6">
-                  <HStack gap="2">
-                    <input
-                      type="radio"
-                      id="youth"
-                      name="userType"
-                      value="청년"
-                      checked={userType === '청년'}
-                      onChange={(e) => setUserType(e.target.value)}
-                      style={{ width: '18px', height: '18px' }}
-                    />
-                    <label 
-                      htmlFor="youth" 
-                      style={{ 
-                        fontSize: '16px', 
-                        color: '#374151',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      청년
-                    </label>
-                  </HStack>
-                  <HStack gap="2">
-                    <input
-                      type="radio"
-                      id="senior"
-                      name="userType"
-                      value="어르신"
-                      checked={userType === '어르신'}
-                      onChange={(e) => setUserType(e.target.value)}
-                      style={{ width: '18px', height: '18px' }}
-                    />
-                    <label 
-                      htmlFor="senior" 
-                      style={{ 
-                        fontSize: '16px', 
-                        color: '#374151',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      어르신
-                    </label>
-                  </HStack>
-                </HStack>
-              </Box>
+              <ValidationRadio
+                label="사용자 유형"
+                name="userType"
+                options={[
+                  { value: '청년', label: '청년' },
+                  { value: '어르신', label: '어르신' }
+                ]}
+                value={userType}
+                onChange={setUserType}
+                required
+              />
 
               {/* ValidationInput 컴포넌트들 */}
               <ValidationInput

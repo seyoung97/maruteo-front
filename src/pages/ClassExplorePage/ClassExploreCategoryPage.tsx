@@ -1,6 +1,6 @@
-import { useParams, useNavigate, useOutletContext } from 'react-router-dom';
-import { Box, Heading, SimpleGrid, Button } from '@chakra-ui/react';
-import CommonCard from '@/components/common/CommonCard';
+import { CommonCard } from '@/components/Card';
+import { Box, Button, Heading, SimpleGrid } from '@chakra-ui/react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 // 예시 더미 데이터 (category 필드 추가)
 const dummyGivers = [
