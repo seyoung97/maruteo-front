@@ -1,4 +1,5 @@
 import { ValidationInput } from '@/components/Input';
+import { useLoginMutation } from '@/hooks/auth';
 import {
   Box,
   Button,
@@ -6,15 +7,17 @@ import {
   Heading,
   HStack,
   Text,
-  VStack
+  VStack,
 } from '@chakra-ui/react';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+
+  const loginMutation = useLoginMutation();
 
   // Validation 함수들
   const validateEmail = (value: string) => {
@@ -28,26 +31,13 @@ export function LoginPage() {
     e.preventDefault();
     
     if (!email || !password) {
-      alert('이메일과 비밀번호를 모두 입력해주세요.');
       return;
     }
 
-    setIsLoading(true);
-    
-    try {
-      // TODO: 실제 로그인 API 호출
-      await new Promise(resolve => setTimeout(resolve, 1000)); // 임시 딜레이
-      
-      alert('로그인 성공! 환영합니다!');
-      
-      // TODO: 로그인 성공 후 리다이렉트
-      console.log('로그인 성공:', { email, password, rememberMe });
-      
-    } catch {
-      alert('로그인 실패. 이메일 또는 비밀번호를 확인해주세요.');
-    } finally {
-      setIsLoading(false);
-    }
+    loginMutation.mutate({
+      email,
+      password,
+    });
   };
 
   return (
@@ -65,6 +55,22 @@ export function LoginPage() {
             로그인
           </Heading>
         </VStack>
+        
+        {/* 에러 메시지 */}
+        {loginMutation.isError && (
+          <Box 
+            bg="red.50" 
+            border="1px solid" 
+            borderColor="red.200" 
+            borderRadius="md" 
+            p="3" 
+            w="full"
+          >
+            <Text color="red.600" fontSize="sm">
+              로그인에 실패했습니다. 이메일과 비밀번호를 다시 확인해주세요.
+            </Text>
+          </Box>
+        )}
         
         {/* 로그인 폼 */}
         <Box w="full" p="10">
@@ -101,6 +107,7 @@ export function LoginPage() {
                     id="rememberMe"
                     checked={rememberMe}
                     onChange={(e) => setRememberMe(e.target.checked)}
+                    disabled={loginMutation.isPending}
                     style={{ width: '18px', height: '18px' }}
                   />
                   <label 
@@ -130,7 +137,7 @@ export function LoginPage() {
                 type="submit"
                 bg="green.500"
                 color="white"
-                loading={isLoading}
+                loading={loginMutation.isPending}
                 w="full"
                 h="48px"
                 fontSize="md"
@@ -142,8 +149,9 @@ export function LoginPage() {
                   boxShadow: "lg" 
                 }}
                 transition="all 0.2s"
+                disabled={loginMutation.isPending}
               >
-                {isLoading ? '로그인 중...' : '로그인'}
+                {loginMutation.isPending ? '로그인 중...' : '로그인'}
               </Button>
             </VStack>
           </form>
@@ -168,6 +176,7 @@ export function LoginPage() {
               borderColor="gray.300"
               color="gray.700"
               _hover={{ bg: "gray.50" }}
+              disabled={loginMutation.isPending}
             >
               Google로 계속하기
             </Button>
@@ -180,6 +189,7 @@ export function LoginPage() {
               borderColor="gray.300"
               color="gray.700"
               _hover={{ bg: "gray.50" }}
+              disabled={loginMutation.isPending}
             >
               Kakao로 계속하기
             </Button>
@@ -190,8 +200,8 @@ export function LoginPage() {
             <Text fontSize="sm" color="gray.600">
               계정이 없으신가요?
             </Text>
-            <a 
-              href="/register" 
+            <Link 
+              to="/auth/register"
               style={{ 
                 color: '#3182ce', 
                 fontSize: '14px', 
@@ -200,7 +210,7 @@ export function LoginPage() {
               }}
             >
               회원가입
-            </a>
+            </Link>
           </HStack>
         </Box>
       </VStack>
