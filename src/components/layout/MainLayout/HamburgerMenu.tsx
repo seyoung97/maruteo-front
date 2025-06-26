@@ -14,6 +14,7 @@ import {
   Portal,
   VStack,
 } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   isOpen: boolean;
@@ -21,6 +22,7 @@ type Props = {
 };
 
 const HamburgerMenu = ({ isOpen, onClose }: Props) => {
+  const navigate = useNavigate();
   return (
     <Drawer.Root open={isOpen} onOpenChange={(e) => !e.open && onClose()}>
       <Portal>
@@ -110,6 +112,7 @@ const HamburgerMenu = ({ isOpen, onClose }: Props) => {
                           size="sm"
                           w="100%"
                           justifyContent="flex-start"
+                          onClick={() => { navigate("/mypage"); onClose(); }}
                         >
                           내 프로필 보기
                         </Button>

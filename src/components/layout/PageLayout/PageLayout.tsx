@@ -8,7 +8,10 @@ export const PageLayout = () => {
   const matches = useMatches();
   const params = useParams();
   const currentMatch = matches[matches.length - 1];
-  let title = (currentMatch?.handle as { title?: string })?.title || "페이지 제목";
+  let title = (currentMatch?.handle as { title?: string, getTitle?: (params: any) => string })?.title || "페이지 제목";
+  if ((currentMatch?.handle as { getTitle?: (params: any) => string })?.getTitle) {
+    title = (currentMatch.handle as any).getTitle(params);
+  }
 
   // :category 등 파라미터 치환
   Object.entries(params).forEach(([key, value]) => {

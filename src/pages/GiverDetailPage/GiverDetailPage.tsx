@@ -1,10 +1,17 @@
 import { CommonCard } from '@/components/Card';
 import { GarlicIcon, StarRating } from '@/components/Icon';
-import { Avatar, Badge, Box, Button, Flex, Heading, HStack, SimpleGrid, Text } from '@chakra-ui/react';
+import { Avatar, Badge, Box, Button, Flex, Heading, HStack, SimpleGrid, Text, VStack, Container } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { useState } from 'react';
+import { FiHeart, FiCheckCircle, FiShare, FiMoreVertical, FiPlus } from 'react-icons/fi';
+import { IoArrowBack } from 'react-icons/io5';
+import { CustomBadge } from '@/components/ui/Badge';
 
 // 기부자 상세 페이지 - 기부자 정보, 수업 목록, 뱃지 등 표시
+
+const GREEN = '#B9EEC6';
+const ACCENT = '#22D060';
+const DARK_GREEN = '#166534';
 
 // 더미 데이터 (뱃지 기준 필드 추가)
 const dummyGivers = [
@@ -22,6 +29,7 @@ const dummyGivers = [
     attendanceRate: 92,
     intro: '정성껏 한식 재능을 나눕니다!',
     type: 'youth',
+    talents: ['한식', '김치', '된장국'],
   },
   {
     id: 2,
@@ -37,6 +45,7 @@ const dummyGivers = [
     attendanceRate: 85,
     intro: '맛있는 집밥을 함께!',
     type: 'youth',
+    talents: ['한식', '찌개'],
   },
 ];
 
@@ -94,10 +103,10 @@ const GiverDetailPage = () => {
   const giver = dummyGivers.find(g => String(g.id) === id);
   const [mainLiked, setMainLiked] = useState<boolean>(false);
   const [mainGarlic, setMainGarlic] = useState<number>(giver ? giver.garlic : 0);
-  if (!giver) return <Box p={4}>존재하지 않는 기부자입니다.</Box>;
 
   // 뱃지 기준
   const isBadge =
+    giver &&
     giver.likeCount >= 10 &&
     giver.classCount >= 10 &&
     giver.activeYear >= 1 &&
@@ -105,96 +114,147 @@ const GiverDetailPage = () => {
     giver.attendanceRate >= 90;
 
   // 해당 기부자가 만든 수업만 필터링
-  const giverClasses = dummyClasses.filter(cls => cls.giverId === giver.id);
+  const giverClasses = giver ? dummyClasses.filter(cls => cls.giverId === giver.id) : [];
 
   return (
-    <Box p={4}>
-      <Box bg="green.50" borderRadius="2xl" p={0} mb={4} boxShadow="sm">
-        <Flex align="center" gap={0} p={0}>
-          <Box p={4} pr={0} display="flex" alignItems="center">
-            <Avatar.Root size="2xl" style={{ boxShadow: '0 2px 8px #b2f5ea33' }}>
-              <Avatar.Fallback name={giver.name} />
-              <Avatar.Image src={giver.thumbnail} />
-            </Avatar.Root>
-          </Box>
-          <Box flex={1} py={4} pl={2} pr={6} display="flex" flexDirection="column" gap={1}>
-            <Heading size="md" color="green.800" mb={1}>{giver.name}</Heading>
-            <Text color="green.700" fontWeight="bold" fontSize="lg">{giver.username}</Text>
-            {isBadge && <Badge colorPalette="green" mt={1} fontWeight="bold" fontSize="md" px={3} py={1} borderRadius="md">우수 기부자</Badge>}
-            <Text mt={2} color="gray.800" fontSize="md">{giver.intro}</Text>
-          </Box>
-        </Flex>
-      </Box>
-      <Box bg="green.50" borderRadius="lg" px={4} py={3} mb={6} boxShadow="xs" w="100%" fontFamily="'Noto Sans KR', '돋움', 'Nanum Gothic', Arial, sans-serif">
-        <HStack gap={3} align="center" mb={2} w="100%" justify="space-between" flexWrap="wrap">
-          <HStack gap={1} minW="60px">
-            <GarlicIcon style={{ fontSize: '1.3em' }} />
-            <Text fontWeight="bold" fontSize="lg">{mainGarlic}</Text>
-          </HStack>
-          <Box minW="90px" maxW="120px" flexShrink={0}>
-            <StarRating value={giver.rating} size="1.3em" />
-          </Box>
-          <Box textAlign="center" minW="60px" maxW="80px" flexShrink={0}>
-            <Text fontSize="xs" color="green.700">수업</Text>
-            <Text fontWeight="extrabold" fontSize="xl" color="green.900" lineHeight={1.1}>{giver.classCount}</Text>
-            <Text fontSize="xs" color="green.700">회</Text>
-          </Box>
-          <Box textAlign="center" minW="60px" maxW="80px" flexShrink={0}>
-            <Text fontSize="xs" color="green.700">활동</Text>
-            <Text fontWeight="extrabold" fontSize="xl" color="green.900" lineHeight={1.1}>{giver.activeYear}</Text>
-            <Text fontSize="xs" color="green.700">년</Text>
-          </Box>
-        </HStack>
-        <HStack gap={4} align="center" justify="center" flexWrap="wrap">
-          <Text fontWeight="semibold" color="green.700" fontSize="md">준비도: <b>{giver.readiness}</b></Text>
-          <Box h="20px" w="1px" bg="green.100" borderRadius="full" display={{ base: 'none', sm: 'inline-block' }} />
-          <Text fontWeight="semibold" color="green.700" fontSize="md">이행률: <b>{giver.attendanceRate}%</b></Text>
-        </HStack>
-      </Box>
-      <Button
-        bg={mainLiked ? 'green.500' : 'gray.200'}
-        color={mainLiked ? 'white' : 'green.800'}
-        _hover={{ bg: mainLiked ? 'green.600' : 'gray.300' }}
-        size="lg"
-        mb={6}
-        borderRadius="xl"
-        px={10}
-        py={6}
-        fontWeight="extrabold"
-        fontSize="xl"
-        boxShadow="md"
-        w="100%"
-        onClick={() => {
-          if (!mainLiked) {
-            setMainLiked(true);
-            setMainGarlic(g => g + 1);
-          } else {
-            setMainLiked(false);
-            setMainGarlic(g => Math.max(0, g - 1));
-          }
-        }}
-      >
-        <HStack gap={2} justify="center">
-          <GarlicIcon style={{ color: mainLiked ? 'white' : '#6B8E23', fontSize: '1.5em' }} />
-          <Text color={mainLiked ? 'white' : 'green.800'} fontWeight="extrabold" fontSize="xl">{mainLiked ? '찜 취소' : '찜하기'}</Text>
-        </HStack>
-      </Button>
-      <Heading size="sm" mb={2} color="green.800">등록한 수업</Heading>
-      {giverClasses.length === 0 ? (
-        <Text color="gray.400">등록한 수업이 없습니다.</Text>
+    <Container bg="white" minH="100vh" maxW="480px" px={0} py={0}>
+      {/* 상단 커스텀 헤더 제거 */}
+      {!giver ? (
+        <Box p={4} textAlign="center" color="gray.500">존재하지 않는 기부자입니다.</Box>
       ) : (
-        <SimpleGrid columns={1} gap={4} w="100%">
-          {giverClasses.map(cls => (
-            <ClassCardWithLike
-              key={cls.id}
-              cls={cls}
-              initialLiked={!!cls.liked}
-              initialGarlic={cls.garlic}
-            />
-          ))}
-        </SimpleGrid>
+        <VStack gap={4} align="stretch" px={6} mt={6}>
+          <Flex align="center" gap={4}>
+            <Box w="72px" h="72px" borderRadius="full" overflow="hidden" bg={GREEN}>
+              <img src={giver.thumbnail} alt="프로필" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </Box>
+            <Box flex={1}>
+              <Heading size="md" color={DARK_GREEN}>{giver.name}</Heading>
+              <Text color={ACCENT} fontSize="sm">{giver.username}</Text>
+              <Text color={DARK_GREEN} fontSize="sm">{giver.intro}</Text>
+              {/* 뱃지 영역 */}
+              <Flex gap={2} mt={2}>
+                <CustomBadge type="youth" />
+                {/* 어르신 기부자라면 <CustomBadge type="senior" /> 추가 */}
+                {isBadge && <CustomBadge type="excellent" />}
+              </Flex>
+              {/* 별점/찜(마늘) 표시 */}
+              <Flex align="center" gap={3} mt={2}>
+                {typeof giver.rating === 'number' && (
+                  <Box color="#FACC15">
+                    <StarRating value={giver.rating} size="1.2em" />
+                  </Box>
+                )}
+                {typeof giver.garlic === 'number' && (
+                  <Text fontSize="md" color="gray.700">
+                    🧄 {giver.garlic}
+                  </Text>
+                )}
+              </Flex>
+              {/* 등록 재능 키워드 */}
+              {giver.talents && (
+                <Flex gap={2} mt={2} flexWrap="wrap">
+                  {giver.talents.map((talent: string) => (
+                    <Box key={talent} bg="#E0F2FE" color="#0369A1" px={3} py={1} borderRadius="full" fontSize="xs" fontWeight="bold">{talent}</Box>
+                  ))}
+                </Flex>
+              )}
+            </Box>
+          </Flex>
+          {/* 재능/포인트 요약 (마이페이지와 유사하게) */}
+          <Flex align="center" justify="space-between" textAlign="center" bg="white" borderRadius="2xl" px={4} py={3} border="1.5px solid #166534">
+            <Box flex={1}>
+              <Text fontWeight="bold" fontSize="xl" color={DARK_GREEN}>{giver.classCount}</Text>
+              <Text fontSize="sm" color={DARK_GREEN}>수업</Text>
+            </Box>
+            <Box flex={1}>
+              <Text fontWeight="bold" fontSize="xl" color={DARK_GREEN}>{giver.activeYear}</Text>
+              <Text fontSize="sm" color={DARK_GREEN}>활동(년)</Text>
+            </Box>
+            <Box flex={1}>
+              <Text fontWeight="bold" fontSize="xl" color={DARK_GREEN}>{giver.rating}</Text>
+              <Text fontSize="sm" color={DARK_GREEN}>평점</Text>
+            </Box>
+          </Flex>
+          {/* 찜하기 버튼 */}
+          <Button
+            bg={mainLiked ? ACCENT : GREEN}
+            color={mainLiked ? 'white' : DARK_GREEN}
+            _hover={{ bg: mainLiked ? '#1DB954' : GREEN }}
+            borderRadius="2xl"
+            fontWeight="bold"
+            fontSize="md"
+            w="100%"
+            py={3}
+            onClick={() => {
+              if (!mainLiked) {
+                setMainLiked(true);
+                setMainGarlic(g => g + 1);
+              } else {
+                setMainLiked(false);
+                setMainGarlic(g => Math.max(0, g - 1));
+              }
+            }}
+          >
+            <Flex align="center" justify="center" gap={2}>
+              <GarlicIcon style={{ color: mainLiked ? 'white' : DARK_GREEN, fontSize: '1.2em' }} />
+              <Text fontWeight="bold">{mainLiked ? '찜 취소' : '찜하기'}</Text>
+            </Flex>
+          </Button>
+          {/* 등록한 수업 */}
+          <Box mt={4}>
+            <Heading size="sm" mb={2} color={DARK_GREEN}>등록한 수업</Heading>
+            {giverClasses.length === 0 ? (
+              <Text color="gray.400">등록한 수업이 없습니다.</Text>
+            ) : (
+              <SimpleGrid columns={1} gap={4} w="100%">
+                {giverClasses.map(cls => (
+                  <Box key={cls.id}>
+                    <CommonCard
+                      thumbnail={cls.thumbnail}
+                      title={cls.title}
+                      garlicCount={cls.garlic}
+                      rating={cls.rating}
+                      badgeText={cls.badge === '청년' ? '청년기부자' : cls.badge}
+                    />
+                    {/* 수업 카드 하단 버튼 */}
+                    <Flex gap={3} mt={2}>
+                      <Button
+                        flex={1}
+                        bg="#B9EEC6"
+                        color="green.900"
+                        fontWeight="bold"
+                        borderRadius="lg"
+                        fontSize="md"
+                        py={6}
+                        leftIcon={<FiHeart size={20} />}
+                        _hover={{ bg: '#86EFAC' }}
+                      >
+                        찜하기
+                      </Button>
+                      <Button
+                        flex={1}
+                        variant="outline"
+                        borderColor="#B9EEC6"
+                        color="green.900"
+                        fontWeight="bold"
+                        borderRadius="lg"
+                        fontSize="md"
+                        py={6}
+                        leftIcon={<FiCheckCircle size={20} />}
+                        bg="white"
+                        _hover={{ bg: '#E0F2F1' }}
+                      >
+                        신청하기
+                      </Button>
+                    </Flex>
+                  </Box>
+                ))}
+              </SimpleGrid>
+            )}
+          </Box>
+        </VStack>
       )}
-    </Box>
+    </Container>
   );
 };
 

@@ -1,5 +1,6 @@
 import { Badge, Box, Flex, HStack, Image, Text } from '@chakra-ui/react';
 import { GarlicIcon, StarRating } from '../Icon';
+import { CustomBadge } from '../ui/Badge';
 
 interface CommonCardProps {
   thumbnail: string;
@@ -10,6 +11,7 @@ interface CommonCardProps {
   badgeText?: string;
   onClick?: () => void;
   isExcellentBadge?: boolean;
+  type?: string;
 }
 
 const CommonCard = ({
@@ -21,6 +23,7 @@ const CommonCard = ({
   badgeText,
   onClick,
   isExcellentBadge,
+  type,
 }: CommonCardProps) => {
   return (
     <Box
@@ -39,42 +42,29 @@ const CommonCard = ({
       <Box position="relative" mb={3}>
         <Image src={thumbnail} alt={title} borderRadius="md" w="100%" h="160px" objectFit="cover" />
         {isExcellentBadge && (
-          <Badge
-            position="absolute"
-            top={2}
-            left={2}
-            colorPalette="green"
-            fontWeight="bold"
-            fontSize="0.85em"
-            px={2}
-            py={1}
-            borderRadius="md"
-            zIndex={1}
-            bg="green.200"
-            display="flex"
-            alignItems="center"
-            gap={1}
-          >
-            🏅 우수기부자
-          </Badge>
+          <Box position="absolute" top={2} left={2} zIndex={1}>
+            <CustomBadge type="excellent" />
+          </Box>
         )}
       </Box>
       <Flex align="center" mb={1} gap={2}>
-        <Text fontWeight="bold" fontSize="lg" lineClamp={1}>{title}</Text>
-        {badgeText && (
-          <Badge colorPalette="green" fontSize="0.8em">{badgeText}</Badge>
-        )}
+        <Text fontWeight="bold" fontSize="lg" noOfLines={1}>{title}</Text>
+        {((badgeText === '청년기부자' || type === 'youth') && <CustomBadge type="youth" />)}
+        {((badgeText === '어르신기부자' || type === 'senior') && <CustomBadge type="senior" />)}
       </Flex>
       {subtitle && (
         <Text color="gray.500" fontSize="sm" lineClamp={2} mb={2}>{subtitle}</Text>
       )}
-      <Flex align="center" gap={3}>
-        {typeof rating === 'number' && <StarRating value={rating} size="1em" />}
+      <Flex align="center" gap={3} mt={2}>
+        {typeof rating === 'number' && (
+          <Box color="#FACC15">
+            <StarRating value={rating} size="1.1em" />
+          </Box>
+        )}
         {typeof garlicCount === 'number' && (
-          <HStack gap={1}>
-            <GarlicIcon style={{ fontSize: '1.2em' }} />
-            <Text fontSize="sm" color="gray.700">{garlicCount}</Text>
-          </HStack>
+          <Text fontSize="md" color="gray.700">
+            🧄 {garlicCount}
+          </Text>
         )}
       </Flex>
     </Box>

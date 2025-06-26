@@ -3,6 +3,7 @@ import { Badge, Box, Button, Flex, Heading, HStack, Image, Text } from '@chakra-
 import { useState } from 'react';
 import { FaPlay } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
+import { CustomBadge } from '@/components/ui/Badge';
 
 // 더미 데이터: 수업, 기부자(뱃지 조건 포함)
 const dummyClasses = [
@@ -41,6 +42,8 @@ const dummyGivers = [
     activeYear: 1.2,
     readiness: '상',
     attendanceRate: 92,
+    type: 'youth',
+    isExcellentBadge: true,
   }
 ];
 
@@ -98,48 +101,53 @@ const ClassDetailPage = () => {
           />
         )}
       </Box>
-      <Flex align="center" gap={2} mb={2}>
-        <Text fontWeight="bold">{cls.title}</Text>
-        <HStack gap={2}>
-          <StarRating value={cls.rating} size="1.2em" />
-          <GarlicIcon style={{ fontSize: '1.2em' }} />
-          <Text>{cls.garlic}</Text>
-          <Button
-            size="sm"
-            px={3}
-            py={0.5}
-            borderRadius="md"
-            fontWeight="semibold"
-            fontSize="sm"
-            bg={liked ? 'green.500' : 'gray.200'}
-            color={liked ? 'white' : 'green.800'}
-            _hover={{ bg: liked ? 'green.600' : 'gray.300' }}
-            boxShadow="md"
-            onClick={() => setLiked(l => !l)}
-          >
-            <HStack gap={0.5} justify="center">
-              <GarlicIcon style={{ color: liked ? 'white' : '#6B8E23', fontSize: '0.9em' }} />
-              <Text fontWeight="semibold">{liked ? '찜 취소' : '찜하기'}</Text>
-            </HStack>
-          </Button>
-        </HStack>
-      </Flex>
+      {/* 영상 밑 초록색 박스 */}
+      <Box bg="#16A34A" color="white" borderRadius="lg" py={3} px={4} mb={4} display="flex" alignItems="center" justifyContent="space-between">
+        <Text fontWeight="bold" fontSize="lg" noOfLines={1}>{cls.title}</Text>
+        <Flex align="center" gap={3}>
+          <Box color="white">
+            <StarRating value={cls.rating} size="1.2em" />
+          </Box>
+          <Text fontSize="md" color="white">🧄 {cls.garlic}</Text>
+        </Flex>
+      </Box>
       {giver && (
-        <Box bg="green.50" borderRadius="xl" p={3} mb={4} boxShadow="sm" display="flex" alignItems="center" gap={3}>
+        <Box bg="white" borderRadius="xl" p={3} mb={4} boxShadow="sm" display="flex" alignItems="center" gap={3}>
           <Image src={giver.thumbnail} w="48px" h="48px" borderRadius="full" boxShadow="xs" />
           <Box flex={1} minW={0}>
-            <Text fontWeight="bold" fontSize="md" color="green.900">{giver.name} <Badge colorPalette="green" fontSize="sm" px={2} py={0.5} ml={1}>청년기부자</Badge></Text>
+            <HStack align="center" gap={2}>
+              <Text fontWeight="bold" fontSize="md" color="green.900">{giver.name}</Text>
+              {giver.type === 'youth' && <CustomBadge type="youth" />}
+              {giver.type === 'senior' && <CustomBadge type="senior" />}
+              {giver.isExcellentBadge && <CustomBadge type="excellent" />}
+            </HStack>
             <Text fontSize="sm" color="green.700" fontWeight="bold">{giver.username}</Text>
             <Text fontSize="sm" color="gray.700">{giver.intro}</Text>
           </Box>
-          {isBadge && (
-            <Box as="span" ml={2} px={2} py={0.5} borderRadius="lg" bg="#BFF5CC" color="#17643B" fontWeight="bold" fontSize="sm" display="inline-flex" alignItems="center" gap={1}>
-              <span role="img" aria-label="medal">🏅</span> 우수기부자
-            </Box>
-          )}
         </Box>
       )}
-      <Button w="full" colorPalette="green" size="lg" mb={4}>수업 신청하기</Button>
+      <Flex w="full" gap={3} mb={4}>
+        <Button flex={1} colorPalette="green" size="lg">수업 신청하기</Button>
+        <Button
+          flexShrink={0}
+          size="lg"
+          px={4}
+          py={2}
+          borderRadius="md"
+          fontWeight="semibold"
+          fontSize="md"
+          bg={liked ? '#059669' : 'white'}
+          color={liked ? 'white' : '#16A34A'}
+          _hover={{ bg: liked ? '#047857' : '#F3F4F6' }}
+          boxShadow="md"
+          onClick={() => setLiked(l => !l)}
+        >
+          <Flex align="center" gap={1}>
+            <span style={{fontSize:'1.1em'}}>🧄</span>
+            <Text fontWeight="semibold">{liked ? '찜취소' : '찜하기'}</Text>
+          </Flex>
+        </Button>
+      </Flex>
       <Box mb={2}>
         <Heading size="sm" mb={1}>수업 소개 <Text as="span" fontSize="sm" color="gray.500">{cls.duration}</Text></Heading>
         <Text fontSize="sm" mb={2}>{cls.intro}</Text>

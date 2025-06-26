@@ -1,6 +1,7 @@
 import { CommonCard } from '@/components/Card';
 import { Box, Button, SimpleGrid } from '@chakra-ui/react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { CustomBadge } from '@/components/ui/Badge';
 
 // 예시 더미 데이터 (category 필드 추가)
 const dummyGivers = [
@@ -47,7 +48,8 @@ const ClassExploreCategoryPage = () => {
               subtitle={giver.username}
               garlicCount={giver.garlic}
               rating={giver.rating}
-              badgeText={giver.badge}
+              badge={giver.badge}
+              type={giver.type}
               isExcellentBadge={isExcellentBadge}
               onClick={() => navigate(`/giver/${giver.id}`)}
             />
@@ -65,7 +67,8 @@ const ClassExploreCategoryPage = () => {
             title={cls.title}
             garlicCount={cls.garlic}
             rating={cls.rating}
-            badgeText={cls.badge}
+            badge={cls.badge}
+            type={cls.type}
             onClick={() => navigate(`/class/${cls.id}`)}
           />
         ))}
