@@ -4,7 +4,8 @@ import axios, { AxiosError } from 'axios';
 import appConfig from '../config';
 import { AuthErrorType, createApiError } from './types';
 
-export const baseURL = appConfig.API_URL;
+// 개발 환경에서는 프록시 사용 (상대 경로), 프로덕션에서는 절대 URL 사용
+export const baseURL = import.meta.env.DEV ? '' : appConfig.API_URL;
 
 // 토큰 관리 유틸리티 - Access 토큰만 사용
 export const tokenManager = {
@@ -45,6 +46,7 @@ export const tokenManager = {
 const apiClient = axios.create({
   baseURL,
   timeout: 10000,
+  withCredentials: true, // 쿠키 포함하여 요청
 });
 
 // Request Interceptor: 모든 요청에 자동으로 토큰 추가

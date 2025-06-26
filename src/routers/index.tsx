@@ -1,7 +1,8 @@
 import { MainLayout } from '@/components/layout/MainLayout';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { LoginPage, ProfilePage, RegisterPage } from '@/pages/auth';
-import { ChatPage, ChatConversationPage } from '@/pages/ChatPage';
+import { RegisterTalentPage } from '@/pages/auth/Profile';
+import { ChatConversationPage, ChatPage } from '@/pages/ChatPage';
 import ClassDetailPage from '@/pages/ClassDetailPage/ClassDetailPage';
 import { ClassExploreCategoryPage, ClassExploreClassListPage, ClassExploreGiverListPage, ClassExplorePage } from '@/pages/ClassExplorePage';
 import { GiverDetailPage } from '@/pages/GiverDetailPage';
@@ -15,6 +16,7 @@ const router = createBrowserRouter(
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/profile/register-talent" element={<RegisterTalentPage />} />
       <Route element={<MainLayout />}>
         <Route index element={<HomePage />} />
       </Route>
