@@ -1,6 +1,7 @@
 import { MainLayout } from '@/components/layout/MainLayout';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { LoginPage, ProfilePage, RegisterPage } from '@/pages/auth';
+import { MyPage } from '@/pages/auth/MyPage';
 import { ChatPage, ChatConversationPage } from '@/pages/ChatPage';
 import ClassDetailPage from '@/pages/ClassDetailPage/ClassDetailPage';
 import { ClassExploreCategoryPage, ClassExploreClassListPage, ClassExploreGiverListPage, ClassExplorePage } from '@/pages/ClassExplorePage';
@@ -21,11 +22,19 @@ const router = createBrowserRouter(
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/mypage" element={<MyPage />} />
       <Route element={<MainLayout />}>
         <Route index element={<HomePage />} />
       </Route>
       <Route element={<PageLayout/>}>
-        <Route path="giver/:id" element={<GiverDetailPage />} handle={{ title: "한식 재능 기부자" }} />
+        <Route path="giver/:id" element={<GiverDetailPage />} handle={{ getTitle: (params) => {
+          const dummyGivers = [
+            { id: 1, username: '@minii' },
+            { id: 2, username: '@duckduck' },
+          ];
+          const giver = dummyGivers.find(g => String(g.id) === params.id);
+          return giver ? `${giver.username}` : '';
+        }}} />
         <Route path="class/:id" element={<ClassDetailPage />} handle={{ title: "수업 상세 안내" }} />
         <Route path="class-explore" element={<ClassExplorePage />} handle={{ title: "재능 탐색" }} />
         <Route path="class-explore/:category" element={<ClassExploreCategoryPage />} handle={{ title: ":category" }} />
