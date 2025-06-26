@@ -1,13 +1,8 @@
 import { MainLayout } from '@/components/layout/MainLayout';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { LoginPage, ProfilePage, RegisterPage } from '@/pages/auth';
-<<<<<<< HEAD
-import { MyPage } from '@/pages/auth/MyPage';
-import { ChatPage, ChatConversationPage } from '@/pages/ChatPage';
-=======
 import { RegisterLearningTalentPage, RegisterTalentPage } from '@/pages/auth/Profile';
 import { ChatConversationPage, ChatPage } from '@/pages/ChatPage';
->>>>>>> 23d9be52041b91a7d30fd1df5e76da9087116db4
 import ClassDetailPage from '@/pages/ClassDetailPage/ClassDetailPage';
 import { ClassExploreCategoryPage, ClassExploreClassListPage, ClassExploreGiverListPage, ClassExplorePage } from '@/pages/ClassExplorePage';
 import { GiverDetailPage } from '@/pages/GiverDetailPage';
@@ -27,17 +22,15 @@ const router = createBrowserRouter(
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/profile" element={<ProfilePage />} />
-<<<<<<< HEAD
-      <Route path="/mypage" element={<MyPage />} />
-=======
       <Route path="/profile/register-talent" element={<RegisterTalentPage />} />
       <Route path="/profile/register-learning-talent" element={<RegisterLearningTalentPage />} />
->>>>>>> 23d9be52041b91a7d30fd1df5e76da9087116db4
+      <Route path="/one-month/talent" element={<OneMonthTalentRegisterPage />} />
+      <Route path="/one-month/want-talent" element={<OneMonthWantTalentPage />} />
       <Route element={<MainLayout />}>
         <Route index element={<HomePage />} />
       </Route>
       <Route element={<PageLayout/>}>
-        <Route path="giver/:id" element={<GiverDetailPage />} handle={{ getTitle: (params) => {
+        <Route path="giver/:id" element={<GiverDetailPage />} handle={{ getTitle: (params: any) => {
           const dummyGivers = [
             { id: 1, username: '@minii' },
             { id: 2, username: '@duckduck' },
@@ -52,8 +45,6 @@ const router = createBrowserRouter(
         <Route path="class-explore/:category/classes" element={<ClassExploreClassListPage />} handle={{ title: ":category 수업 목록" }} />
         <Route path="one-month" element={<OneMonthMainPage />} handle={{ title: "의성 한 달 살이" }} />
         <Route path="one-month/apply" element={<OneMonthApplyPage />} handle={{ title: "신청하기" }} />
-        <Route path="one-month/talent" element={<OneMonthTalentRegisterPage />} handle={{ title: "재능 등록" }} />
-        <Route path="one-month/want-talent" element={<OneMonthWantTalentPage />} handle={{ title: "배우고 싶은 재능 등록" }} />
         <Route path="one-month/complete" element={<OneMonthCompletePage />} handle={{ title: "완료" }} />
       </Route>
       {/* Chat 관련 페이지들은 상단바/하단바 없이 풀스크린 */}

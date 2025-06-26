@@ -1,111 +1,201 @@
-import { Box, Button, Input, Text } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
+import { haveTalentsAtom } from '@/atoms/registerAtoms';
+import { useAtom } from 'jotai';
 import { useState } from 'react';
-// ValidationInput, ValidationRadio가 필요하다면 아래와 같이 import
-// import { ValidationInput, ValidationRadio } from '@/components/Input/ValidationInput';
-
-const mainCategories = [
-  { key: '요리', subs: ['한식', '중식', '일식', '양식', '기타'] },
-  { key: 'IT', subs: ['스마트폰 사용', '배달앱 사용', '인터넷 뱅킹', '키오스크 사용법', '보이스 피싱', '기타'] },
-  { key: '악기', subs: ['피아노', '드럼', '플루트', '기타'] },
-  { key: '운동', subs: ['걷기', '요가', '스트레칭', '탁구', '기타'] },
-  { key: '글쓰기', subs: ['일기', '편지', '시', '수필', '기타'] },
-  { key: '미술', subs: ['수채화', '색연필화', '캘리그라피', '종이접기', '기타'] },
-  { key: '농업', subs: ['텃밭 가꾸기', '화분 관리', '작물 재배', '기타'] },
-];
+import {
+  Box,
+  Button,
+  Container,
+  Heading,
+  HStack,
+  IconButton,
+  Text,
+  VStack
+} from '@chakra-ui/react';
+import { IoAdd, IoArrowBack } from 'react-icons/io5';
+import { useNavigate } from 'react-router-dom';
+import TalentSelector from '../../components/TalentSelector/TalentSelector';
+import type { SelectedTalent } from '../../services/talentTypes';
 
 const OneMonthWantTalentPage = () => {
   const navigate = useNavigate();
-  const [search, setSearch] = useState('');
-  const [checked, setChecked] = useState<string[]>([]);
-  const [selectedMain, setSelectedMain] = useState(mainCategories[0].key);
+  const [selectedTalentNames, setSelectedTalentNames] = useAtom(haveTalentsAtom);
+  const [showTalentSelector, setShowTalentSelector] = useState(false);
 
-  const handleCheck = (item: string) => {
-    setChecked(prev => prev.includes(item) ? prev.filter(i => i !== item) : [...prev, item]);
+  const handleBack = () => {
+    navigate(-1);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleAddTalent = () => {
+    setShowTalentSelector(true);
+  };
+
+  const handleTalentConfirm = (selectedTalents: SelectedTalent[]) => {
+    const updatedTalentNames = [...selectedTalentNames];
+    selectedTalents.forEach(talent => {
+      if (!updatedTalentNames.includes(talent.name)) {
+        updatedTalentNames.push(talent.name);
+      }
+    });
+    setSelectedTalentNames(updatedTalentNames);
+    setShowTalentSelector(false);
+  };
+
+  const handleTalentCancel = () => {
+    setShowTalentSelector(false);
+  };
+
+  const removeTalent = (talentName: string) => {
+    setSelectedTalentNames(prev => prev.filter(name => name !== talentName));
+  };
+
+  const handleContinue = () => {
     navigate('/one-month/complete');
   };
 
-  // 검색어로 큰 범주와 세부 재능 모두 필터링
-  const filteredMain = mainCategories.filter(cat =>
-    cat.key.includes(search) || cat.subs.some(sub => sub.includes(search))
-  );
-  const selected = filteredMain.find(cat => cat.key === selectedMain) || filteredMain[0];
-  const filteredSubs = selected
-    ? selected.subs.filter(sub => sub.includes(search))
-    : [];
+  if (showTalentSelector) {
+    return (
+      <TalentSelector
+        onConfirm={handleTalentConfirm}
+        onCancel={handleTalentCancel}
+      />
+    );
+  }
 
   return (
-    <Box minH="100vh" bg="#fff" py={4} px={2} as="form" onSubmit={handleSubmit} w="100%" maxW="480px" mx="auto">
-      <Text fontWeight="bold" fontSize="xl" mb={2} textAlign="center">
-        배우고 싶은 재능 등록
-      </Text>
-      <Text fontSize="md" color="gray.600" mb={4} textAlign="center">
-        한달 동안 배우고 싶은 재능을 등록해주세요
-      </Text>
-      <Input placeholder="빠르게 찾기" value={search} onChange={e => setSearch(e.target.value)} bg="white" mb={4} maxW="90%" mx="auto" display="block" />
-      <Box display="flex" justifyContent="center" alignItems="flex-start" gap={8} w="100%" maxW="400px" mx="auto" mt={8}>
-        {/* 왼쪽: 카테고리 버튼 */}
-        <Box display="flex" flexDirection="column" gap={0} w="120px">
-          {filteredMain.map(cat => (
-            <Button
-              key={cat.key}
+    <Container 
+      bg="white" 
+      minH="100vh" 
+      maxW="480px" 
+      px="4"
+      style={{ backgroundColor: 'white' }}
+    >
+      <VStack gap="6" minH="100vh" py="4">
+        {/* 내부 헤더만 남기고, 라우터 헤더는 제거 */}
+        <Box w="full" position="relative" py="3">
+          <HStack justify="space-between" align="center">
+            <IconButton
+              aria-label="뒤로가기"
               variant="ghost"
-              justifyContent="flex-start"
-              bg={selectedMain === cat.key ? 'gray.100' : 'transparent'}
-              fontWeight={selectedMain === cat.key ? 'bold' : 'normal'}
-              color="black"
-              borderRadius="md"
-              h="40px"
-              px={4}
-              onClick={() => setSelectedMain(cat.key)}
-              _hover={{ bg: 'gray.200' }}
+              size="lg"
+              onClick={handleBack}
+              color="gray.600"
             >
-              {cat.key}
-            </Button>
-          ))}
+              <IoArrowBack />
+            </IconButton>
+            <Heading size="lg" color="gray.800" fontWeight="bold">
+              한 달 살이 배우고 싶은 재능 등록
+            </Heading>
+            <Box w="40px" />
+          </HStack>
         </Box>
-        {/* 오른쪽: 서브카테고리 + 체크박스 */}
-        <Box display="flex" flexDirection="column" gap={0} w="140px">
-          {filteredSubs.length ? (
-            filteredSubs.map(sub => (
-              <Box key={sub} display="flex" alignItems="center" h="40px" px={2}>
-                <span style={{ flex: 1 }}>{sub}</span>
-                <input
-                  type="checkbox"
-                  checked={checked.includes(sub)}
-                  onChange={() => handleCheck(sub)}
-                  style={{ accentColor: '#7AC47F', width: 18, height: 18 }}
-                />
+        {/* 메인 컨텐츠 */}
+        <VStack gap="6" flex="1" justify="flex-start" w="full" px="2">
+          <VStack gap="3" textAlign="left" w="full">
+            <Heading size="lg" color="gray.800" fontWeight="bold" alignSelf="flex-start">
+              배우고 싶은 재능 등록
+            </Heading>
+            <Text fontSize="md" color="gray.600" alignSelf="flex-start">
+              한 달 동안 배우고 싶은 재능을 등록해 주세요
+            </Text>
+          </VStack>
+          {/* 재능 목록 */}
+          <Box w="full" flex="1" minH="300px">
+            {selectedTalentNames.length === 0 ? (
+              <Box 
+                w="full" 
+                h="200px" 
+                display="flex" 
+                alignItems="center" 
+                justifyContent="center"
+                color="gray.400"
+              >
+                <Text fontSize="sm">등록된 재능이 없습니다</Text>
               </Box>
-            ))
-          ) : (
-            <Box color="gray.400" h="40px" px={4} display="flex" alignItems="center">
-              세부 재능 없음
-            </Box>
-          )}
-        </Box>
-      </Box>
-      <Button
-        type="submit"
-        bg="#DFF5DF"
-        color="#226B3A"
-        size="lg"
-        mt={8}
-        borderRadius="2xl"
-        w="90%"
-        mx="auto"
-        display="block"
-        fontWeight="bold"
-        fontSize="lg"
-        _hover={{ bg: '#c8eac8' }}
-      >
-        등록하기
-      </Button>
-    </Box>
+            ) : (
+              <VStack gap="3" w="full">
+                {selectedTalentNames.map((talentName, index) => (
+                  <HStack
+                    key={`${talentName}-${index}`}
+                    w="full"
+                    p="4"
+                    bg="gray.50"
+                    borderRadius="lg"
+                    border="1px solid"
+                    borderColor="gray.200"
+                    justify="space-between"
+                  >
+                    <VStack align="start" gap="1">
+                      <Text fontSize="md" color="gray.800" fontWeight="medium">
+                        {talentName}
+                      </Text>
+                    </VStack>
+                    <IconButton
+                      aria-label="재능 삭제"
+                      size="sm"
+                      variant="ghost"
+                      color="gray.400"
+                      onClick={() => removeTalent(talentName)}
+                    >
+                      ×
+                    </IconButton>
+                  </HStack>
+                ))}
+              </VStack>
+            )}
+          </Box>
+        </VStack>
+        {/* 버튼 영역 */}
+        <VStack w="full" px="2" pb="4" gap="3">
+          <Button
+            onClick={handleAddTalent}
+            bg="white"
+            color="green.500"
+            border="2px solid"
+            borderColor="green.500"
+            w="full"
+            h="48px"
+            fontSize="md"
+            fontWeight="semibold"
+            borderRadius="full"
+            _hover={{ 
+              bg: "green.50",
+              transform: "translateY(-1px)", 
+              boxShadow: "lg" 
+            }}
+            transition="all 0.2s"
+          >
+            <HStack gap="2">
+              <IoAdd />
+              <Text>재능 추가</Text>
+            </HStack>
+          </Button>
+          <Button
+            onClick={handleContinue}
+            disabled={selectedTalentNames.length === 0}
+            bg={selectedTalentNames.length > 0 ? "green.400" : "gray.300"}
+            color="white"
+            w="full"
+            h="48px"
+            fontSize="md"
+            fontWeight="semibold"
+            borderRadius="full"
+            _hover={selectedTalentNames.length > 0 ? { 
+              bg: "green.500",
+              transform: "translateY(-1px)", 
+              boxShadow: "lg" 
+            } : {}}
+            _disabled={{
+              bg: "gray.300",
+              color: "gray.500",
+              cursor: "not-allowed"
+            }}
+            transition="all 0.2s"
+          >
+            등록하기
+          </Button>
+        </VStack>
+      </VStack>
+    </Container>
   );
 };
 
