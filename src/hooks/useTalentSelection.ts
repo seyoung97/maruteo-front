@@ -9,12 +9,39 @@ export const useTalentSelection = () => {
     searchTerm: '',
   });
 
-  // 검색어로 필터링된 하위 카테고리들 (전체 데이터에서 검색)
-  const filteredSubCategories = useMemo(() => {
-    // 검색어가 있는 경우: 전체 데이터에서 검색
+  // 검색어로 필터링된 카테고리들 (검색 결과에 해당하는 상위 카테고리만)
+  const filteredCategories = useMemo(() => {
     if (state.searchTerm) {
+      return TALENT_CATEGORIES.filter(category =>
+        category.name.toLowerCase().includes(state.searchTerm.toLowerCase()) ||
+        category.subCategories.some(subCat =>
+          subCat.name.toLowerCase().includes(state.searchTerm.toLowerCase())
+        )
+      );
+    }
+    return TALENT_CATEGORIES;
+  }, [state.searchTerm]);
+
+  // 검색어로 필터링된 하위 카테고리들
+  const filteredSubCategories = useMemo(() => {
+    // 검색어가 있는 경우
+    if (state.searchTerm) {
+      // 카테고리가 선택된 경우: 선택된 카테고리에서만 검색
+      if (state.selectedCategory) {
+        const selectedCategoryData = TALENT_CATEGORIES.find(
+          cat => cat.id === state.selectedCategory
+        );
+        if (selectedCategoryData) {
+          return selectedCategoryData.subCategories.filter(subCat =>
+            subCat.name.toLowerCase().includes(state.searchTerm.toLowerCase())
+          );
+        }
+        return [];
+      }
+      
+      // 카테고리가 선택되지 않은 경우: 필터링된 모든 카테고리에서 검색
       const searchResults: TalentSubCategory[] = [];
-      TALENT_CATEGORIES.forEach(category => {
+      filteredCategories.forEach(category => {
         const matchingSubCategories = category.subCategories.filter(subCat =>
           subCat.name.toLowerCase().includes(state.searchTerm.toLowerCase())
         );
@@ -29,7 +56,7 @@ export const useTalentSelection = () => {
     );
     
     return currentCategory ? currentCategory.subCategories : [];
-  }, [state.selectedCategory, state.searchTerm]);
+  }, [state.selectedCategory, state.searchTerm, filteredCategories]);
 
   // 카테고리 선택
   const selectCategory = (categoryId: string) => {
@@ -44,8 +71,8 @@ export const useTalentSelection = () => {
     setState(prev => ({ 
       ...prev, 
       searchTerm: term,
-      // 검색어가 있을 때는 카테고리 선택을 무시
-      selectedCategory: term ? null : prev.selectedCategory
+      // 검색어를 지웠을 때만 카테고리 선택을 초기화
+      selectedCategory: !term ? null : prev.selectedCategory
     }));
   };
 
@@ -102,7 +129,7 @@ export const useTalentSelection = () => {
     selectedTalents: state.selectedTalents,
     searchTerm: state.searchTerm,
     filteredSubCategories,
-    categories: TALENT_CATEGORIES,
+    categories: filteredCategories, // 필터링된 카테고리를 반환
     
     // 액션
     selectCategory,
