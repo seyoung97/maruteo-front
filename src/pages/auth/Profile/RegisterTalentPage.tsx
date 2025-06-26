@@ -24,8 +24,7 @@ export const RegisterTalentPage = () => {
   // jotai atom에서 현재 선택된 재능들 가져오기
   const [selectedTalentNames, setSelectedTalentNames] = useAtom(haveTalentsAtom);
   
-  // UI용 상태 (TalentSelector에서 사용)
-  const [talents, setTalents] = useState<SelectedTalent[]>([]);
+  // UI용 상태
   const [showTalentSelector, setShowTalentSelector] = useState(false);
 
   const handleBack = () => {
@@ -37,13 +36,6 @@ export const RegisterTalentPage = () => {
   };
 
   const handleTalentConfirm = (selectedTalents: SelectedTalent[]) => {
-    // 중복 제거하면서 새로운 재능들 추가
-    setTalents(prev => {
-      const existingIds = prev.map(t => t.id);
-      const newTalents = selectedTalents.filter(t => !existingIds.includes(t.id));
-      return [...prev, ...newTalents];
-    });
-    
     // jotai atom 업데이트 (재능 이름들만 저장)
     const updatedTalentNames = [...selectedTalentNames];
     selectedTalents.forEach(talent => {
@@ -52,7 +44,6 @@ export const RegisterTalentPage = () => {
       }
     });
     setSelectedTalentNames(updatedTalentNames);
-    
     setShowTalentSelector(false);
   };
 
@@ -60,10 +51,7 @@ export const RegisterTalentPage = () => {
     setShowTalentSelector(false);
   };
 
-  const removeTalent = (talentId: string, talentName: string) => {
-    // UI 상태에서 제거
-    setTalents(prev => prev.filter(t => t.id !== talentId));
-    
+  const removeTalent = (talentName: string) => {
     // jotai atom에서 제거
     setSelectedTalentNames(prev => prev.filter(name => name !== talentName));
   };
@@ -157,7 +145,7 @@ export const RegisterTalentPage = () => {
                       size="sm"
                       variant="ghost"
                       color="gray.400"
-                      onClick={() => removeTalent(`talent-${index}`, talentName)}
+                      onClick={() => removeTalent(talentName)}
                     >
                       ×
                     </IconButton>

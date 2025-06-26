@@ -22,13 +22,12 @@ import type { SelectedTalent } from '../../../services/talentTypes';
 export const RegisterLearningTalentPage = () => {
   const navigate = useNavigate();
   const { completeRegistration, isLoading } = useRegisterFlow();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { open, onClose } = useDisclosure();
   
   // jotai atom에서 현재 선택된 재능들 가져오기
   const [selectedTalentNames, setSelectedTalentNames] = useAtom(wantTalentsAtom);
   
-  // UI용 상태 (TalentSelector에서 사용)
-  const [talents, setTalents] = useState<SelectedTalent[]>([]);
+  // UI용 상태
   const [showTalentSelector, setShowTalentSelector] = useState(false);
 
   const handleBack = () => {
@@ -40,13 +39,6 @@ export const RegisterLearningTalentPage = () => {
   };
 
   const handleTalentConfirm = (selectedTalents: SelectedTalent[]) => {
-    // 중복 제거하면서 새로운 재능들 추가
-    setTalents(prev => {
-      const existingIds = prev.map(t => t.id);
-      const newTalents = selectedTalents.filter(t => !existingIds.includes(t.id));
-      return [...prev, ...newTalents];
-    });
-    
     // jotai atom 업데이트 (재능 이름들만 저장)
     const updatedTalentNames = [...selectedTalentNames];
     selectedTalents.forEach(talent => {
@@ -55,7 +47,6 @@ export const RegisterLearningTalentPage = () => {
       }
     });
     setSelectedTalentNames(updatedTalentNames);
-    
     setShowTalentSelector(false);
   };
 
@@ -63,10 +54,7 @@ export const RegisterLearningTalentPage = () => {
     setShowTalentSelector(false);
   };
 
-  const removeTalent = (talentId: string, talentName: string) => {
-    // UI 상태에서 제거
-    setTalents(prev => prev.filter(t => t.id !== talentId));
-    
+  const removeTalent = (talentName: string) => {
     // jotai atom에서 제거
     setSelectedTalentNames(prev => prev.filter(name => name !== talentName));
   };
@@ -167,7 +155,7 @@ export const RegisterLearningTalentPage = () => {
                         size="sm"
                         variant="ghost"
                         color="gray.400"
-                        onClick={() => removeTalent(`talent-${index}`, talentName)}
+                        onClick={() => removeTalent(talentName)}
                       >
                         ×
                       </IconButton>
@@ -234,7 +222,7 @@ export const RegisterLearningTalentPage = () => {
       </Container>
 
       {/* 성공 모달 */}
-      <CommonModal isOpen={isOpen} onClose={onClose}>
+      <CommonModal isOpen={open} onClose={onClose}>
         <VStack gap="4" textAlign="center">
           <Heading size="md" color="gray.800">
             회원가입 완료!
