@@ -1,3 +1,5 @@
+import { haveTalentsAtom } from '@/atoms/registerAtoms';
+import { useRegisterFlow } from '@/hooks/auth/useRegisterFlow';
 import {
   Box,
   Button,
@@ -8,6 +10,7 @@ import {
   Text,
   VStack
 } from '@chakra-ui/react';
+import { useAtom } from 'jotai';
 import { useState } from 'react';
 import { IoAdd, IoArrowBack } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
@@ -16,6 +19,12 @@ import type { SelectedTalent } from '../../../services/talentTypes';
 
 export const RegisterTalentPage = () => {
   const navigate = useNavigate();
+  const { proceedToLearningTalentRegistration } = useRegisterFlow();
+  
+  // jotai atom에서 현재 선택된 재능들 가져오기
+  const [selectedTalentNames, setSelectedTalentNames] = useAtom(haveTalentsAtom);
+  
+  // UI용 상태 (TalentSelector에서 사용)
   const [talents, setTalents] = useState<SelectedTalent[]>([]);
   const [showTalentSelector, setShowTalentSelector] = useState(false);
 
@@ -28,12 +37,22 @@ export const RegisterTalentPage = () => {
   };
 
   const handleTalentConfirm = (selectedTalents: SelectedTalent[]) => {
+    // 중복 제거하면서 새로운 재능들 추가
     setTalents(prev => {
-      // 중복 제거하면서 새로운 재능들 추가
       const existingIds = prev.map(t => t.id);
       const newTalents = selectedTalents.filter(t => !existingIds.includes(t.id));
       return [...prev, ...newTalents];
     });
+    
+    // jotai atom 업데이트 (재능 이름들만 저장)
+    const updatedTalentNames = [...selectedTalentNames];
+    selectedTalents.forEach(talent => {
+      if (!updatedTalentNames.includes(talent.name)) {
+        updatedTalentNames.push(talent.name);
+      }
+    });
+    setSelectedTalentNames(updatedTalentNames);
+    
     setShowTalentSelector(false);
   };
 
@@ -41,14 +60,16 @@ export const RegisterTalentPage = () => {
     setShowTalentSelector(false);
   };
 
-  const removeTalent = (talentId: string) => {
+  const removeTalent = (talentId: string, talentName: string) => {
+    // UI 상태에서 제거
     setTalents(prev => prev.filter(t => t.id !== talentId));
+    
+    // jotai atom에서 제거
+    setSelectedTalentNames(prev => prev.filter(name => name !== talentName));
   };
 
   const handleContinue = () => {
-    // TODO: 다음 페이지로 이동 (예: 프로필 완성 페이지)
-    console.log('등록된 재능:', talents);
-    // navigate('/profile/complete'); // 실제 경로로 변경 필요
+    proceedToLearningTalentRegistration(selectedTalentNames);
   };
 
   // 재능 선택기가 열려있으면 해당 컴포넌트 렌더링
@@ -85,13 +106,12 @@ export const RegisterTalentPage = () => {
             <Heading size="lg" color="gray.800" fontWeight="bold">
               프로필
             </Heading>
-            <Box w="40px" /> {/* 우측 공간 확보 */}
+            <Box w="40px" />
           </HStack>
         </Box>
         
         {/* 메인 컨텐츠 */}
         <VStack gap="6" flex="1" justify="flex-start" w="full" px="2">
-          {/* 제목 */}
           <VStack gap="3" textAlign="left" w="full">
             <Heading size="lg" color="gray.800" fontWeight="bold" alignSelf="flex-start">
               재능 등록
@@ -103,7 +123,7 @@ export const RegisterTalentPage = () => {
           
           {/* 재능 목록 */}
           <Box w="full" flex="1" minH="300px">
-            {talents.length === 0 ? (
+            {selectedTalentNames.length === 0 ? (
               <Box 
                 w="full" 
                 h="200px" 
@@ -116,9 +136,9 @@ export const RegisterTalentPage = () => {
               </Box>
             ) : (
               <VStack gap="3" w="full">
-                {talents.map((talent) => (
+                {selectedTalentNames.map((talentName, index) => (
                   <HStack
-                    key={talent.id}
+                    key={`${talentName}-${index}`}
                     w="full"
                     p="4"
                     bg="gray.50"
@@ -129,10 +149,7 @@ export const RegisterTalentPage = () => {
                   >
                     <VStack align="start" gap="1">
                       <Text fontSize="md" color="gray.800" fontWeight="medium">
-                        {talent.name}
-                      </Text>
-                      <Text fontSize="sm" color="gray.500">
-                        {talent.categoryName}
+                        {talentName}
                       </Text>
                     </VStack>
                     <IconButton
@@ -140,7 +157,7 @@ export const RegisterTalentPage = () => {
                       size="sm"
                       variant="ghost"
                       color="gray.400"
-                      onClick={() => removeTalent(talent.id)}
+                      onClick={() => removeTalent(`talent-${index}`, talentName)}
                     >
                       ×
                     </IconButton>
@@ -153,7 +170,6 @@ export const RegisterTalentPage = () => {
         
         {/* 버튼 영역 */}
         <VStack w="full" px="2" pb="4" gap="3">
-          {/* 재능 추가 버튼 */}
           <Button
             onClick={handleAddTalent}
             bg="white"
@@ -178,18 +194,17 @@ export const RegisterTalentPage = () => {
             </HStack>
           </Button>
           
-          {/* 계속 버튼 */}
           <Button
             onClick={handleContinue}
-            disabled={talents.length === 0}
-            bg={talents.length > 0 ? "green.400" : "gray.300"}
+            disabled={selectedTalentNames.length === 0}
+            bg={selectedTalentNames.length > 0 ? "green.400" : "gray.300"}
             color="white"
             w="full"
             h="48px"
             fontSize="md"
             fontWeight="semibold"
             borderRadius="full"
-            _hover={talents.length > 0 ? { 
+            _hover={selectedTalentNames.length > 0 ? { 
               bg: "green.500",
               transform: "translateY(-1px)", 
               boxShadow: "lg" 

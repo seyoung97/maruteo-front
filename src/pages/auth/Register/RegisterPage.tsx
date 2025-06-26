@@ -1,24 +1,20 @@
+import { birthAtom, confirmPasswordAtom, emailAtom, nameAtom, passwordAtom, phoneAtom, roleAtom } from '@/atoms/registerAtoms';
 import { ValidationInput, ValidationRadio } from '@/components/Input';
-import {
-  Box,
-  Button,
-  Container,
-  Heading,
-  HStack,
-  Text,
-  VStack
-} from '@chakra-ui/react';
-import { useState } from 'react';
+import { useRegisterFlow } from '@/hooks/auth/useRegisterFlow';
+import { Box, Button, Container, Heading, VStack } from '@chakra-ui/react';
+import { useAtom } from 'jotai';
 
 export function RegisterPage() {
-  const [userType, setUserType] = useState('청년'); // '어르신' 또는 '청년'
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [birthDate, setBirthDate] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const { proceedToProfile } = useRegisterFlow();
+  
+  // 조타이 atom 직접 사용
+  const [userType, setUserType] = useAtom(roleAtom);
+  const [name, setName] = useAtom(nameAtom);
+  const [email, setEmail] = useAtom(emailAtom);
+  const [phone, setPhone] = useAtom(phoneAtom);
+  const [birthDate, setBirthDate] = useAtom(birthAtom);
+  const [password, setPassword] = useAtom(passwordAtom);
+  const [confirmPassword, setConfirmPassword] = useAtom(confirmPasswordAtom);
 
   // Validation 함수들
   const validateEmail = (value: string) => {
@@ -65,47 +61,22 @@ export function RegisterPage() {
       return;
     }
 
-    setIsLoading(true);
-    
-    try {
-      // TODO: 실제 회원가입 API 호출
-      await new Promise(resolve => setTimeout(resolve, 1500)); // 임시 딜레이
-      
-      alert('회원가입이 완료되었습니다! 로그인 페이지로 이동합니다.');
-      
-      // TODO: 회원가입 성공 후 로그인 페이지로 리다이렉트
-      console.log('회원가입 성공:', { 
-        userType, name, email, phone, birthDate, password 
-      });
-      
-    } catch {
-      alert('회원가입에 실패했습니다. 다시 시도해주세요.');
-    } finally {
-      setIsLoading(false);
-    }
+    // 조타이 atom에 이미 저장되어 있으므로 바로 다음 페이지로
+    proceedToProfile();
   };
 
   return (
-    <Container 
-      bg="white" 
-      minH="100vh" 
-      maxW="480px" 
-      px="4"
-      style={{ backgroundColor: 'white' }}
-    >
+    <Container bg="white" minH="100vh" maxW="480px" px="4">
       <VStack gap="8" justify="center" minH="100vh" py="8">
-        {/* 헤더 */}
         <VStack gap="3" textAlign="center">
           <Heading size="xl" color="gray.800" fontWeight="bold">
             회원가입
           </Heading>
         </VStack>
         
-        {/* 회원가입 폼 */}
         <Box w="full" p="6">
           <form onSubmit={handleSubmit}>
             <VStack gap="6">
-              {/* 사용자 유형 선택 */}
               <ValidationRadio
                 label="사용자 유형"
                 name="userType"
@@ -114,11 +85,10 @@ export function RegisterPage() {
                   { value: '어르신', label: '어르신' }
                 ]}
                 value={userType}
-                onChange={setUserType}
+                onChange={(value) => setUserType(value as '청년' | '어르신')}
                 required
               />
 
-              {/* ValidationInput 컴포넌트들 */}
               <ValidationInput
                 id="name"
                 label="이름"
@@ -184,12 +154,10 @@ export function RegisterPage() {
                 validation={validateConfirmPassword}
               />
 
-              {/* 회원가입 버튼 */}
               <Button
                 type="submit"
                 bg="green.500"
                 color="white"
-                loading={isLoading}
                 w="full"
                 h="48px"
                 fontSize="md"
@@ -201,30 +169,12 @@ export function RegisterPage() {
                   boxShadow: "lg" 
                 }}
                 transition="all 0.2s"
-                mt="2"
+                mt="4"
               >
-                {isLoading ? '회원가입 중...' : '회원가입'}
+                계속
               </Button>
             </VStack>
           </form>
-          
-          {/* 로그인 링크 */}
-          <HStack pt="6" justify="center" w="full">
-            <Text fontSize="sm" color="gray.600">
-              이미 계정이 있으신가요?
-            </Text>
-            <a 
-              href="/login" 
-              style={{ 
-                color: '#3182ce', 
-                fontSize: '14px', 
-                fontWeight: '500', 
-                textDecoration: 'underline' 
-              }}
-            >
-              로그인
-            </a>
-          </HStack>
         </Box>
       </VStack>
     </Container>

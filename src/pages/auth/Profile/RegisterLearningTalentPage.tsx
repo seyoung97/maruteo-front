@@ -1,3 +1,5 @@
+import { wantTalentsAtom } from '@/atoms/registerAtoms';
+import { useRegisterFlow } from '@/hooks/auth/useRegisterFlow';
 import {
   Box,
   Button,
@@ -9,6 +11,7 @@ import {
   useDisclosure,
   VStack
 } from '@chakra-ui/react';
+import { useAtom } from 'jotai';
 import { useState } from 'react';
 import { IoAdd, IoArrowBack } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
@@ -18,9 +21,15 @@ import type { SelectedTalent } from '../../../services/talentTypes';
 
 export const RegisterLearningTalentPage = () => {
   const navigate = useNavigate();
+  const { completeRegistration, isLoading } = useRegisterFlow();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  
+  // jotai atom에서 현재 선택된 재능들 가져오기
+  const [selectedTalentNames, setSelectedTalentNames] = useAtom(wantTalentsAtom);
+  
+  // UI용 상태 (TalentSelector에서 사용)
   const [talents, setTalents] = useState<SelectedTalent[]>([]);
   const [showTalentSelector, setShowTalentSelector] = useState(false);
-  const {open,  onOpen, onClose } = useDisclosure();
 
   const handleBack = () => {
     navigate(-1);
@@ -31,12 +40,22 @@ export const RegisterLearningTalentPage = () => {
   };
 
   const handleTalentConfirm = (selectedTalents: SelectedTalent[]) => {
+    // 중복 제거하면서 새로운 재능들 추가
     setTalents(prev => {
-      // 중복 제거하면서 새로운 재능들 추가
       const existingIds = prev.map(t => t.id);
       const newTalents = selectedTalents.filter(t => !existingIds.includes(t.id));
       return [...prev, ...newTalents];
     });
+    
+    // jotai atom 업데이트 (재능 이름들만 저장)
+    const updatedTalentNames = [...selectedTalentNames];
+    selectedTalents.forEach(talent => {
+      if (!updatedTalentNames.includes(talent.name)) {
+        updatedTalentNames.push(talent.name);
+      }
+    });
+    setSelectedTalentNames(updatedTalentNames);
+    
     setShowTalentSelector(false);
   };
 
@@ -44,19 +63,22 @@ export const RegisterLearningTalentPage = () => {
     setShowTalentSelector(false);
   };
 
-  const removeTalent = (talentId: string) => {
+  const removeTalent = (talentId: string, talentName: string) => {
+    // UI 상태에서 제거
     setTalents(prev => prev.filter(t => t.id !== talentId));
+    
+    // jotai atom에서 제거
+    setSelectedTalentNames(prev => prev.filter(name => name !== talentName));
   };
 
   const handleContinue = () => {
-    console.log('배우고 싶은 재능:', talents);
-    onOpen(); // 모달 열기
+    console.log('최종 회원가입 데이터 전송:', selectedTalentNames);
+    completeRegistration(selectedTalentNames);
   };
 
   const handleModalComplete = () => {
     onClose();
-    // 모달 닫은 후 다음 페이지로 이동하거나 원하는 동작 수행
-    navigate('/'); // 홈으로 이동하거나 원하는 페이지로 변경
+    navigate('/');
   };
 
   // 재능 선택기가 열려있으면 해당 컴포넌트 렌더링
@@ -94,13 +116,12 @@ export const RegisterLearningTalentPage = () => {
               <Heading size="lg" color="gray.800" fontWeight="bold">
                 프로필
               </Heading>
-              <Box w="40px" /> {/* 우측 공간 확보 */}
+              <Box w="40px" />
             </HStack>
           </Box>
           
           {/* 메인 컨텐츠 */}
           <VStack gap="6" flex="1" justify="flex-start" w="full" px="2">
-            {/* 제목 */}
             <VStack gap="3" textAlign="left" w="full">
               <Heading size="lg" color="gray.800" fontWeight="bold" alignSelf="flex-start">
                 배우고 싶은 재능 등록
@@ -112,7 +133,7 @@ export const RegisterLearningTalentPage = () => {
             
             {/* 재능 목록 */}
             <Box w="full" flex="1" minH="300px">
-              {talents.length === 0 ? (
+              {selectedTalentNames.length === 0 ? (
                 <Box 
                   w="full" 
                   h="200px" 
@@ -125,9 +146,9 @@ export const RegisterLearningTalentPage = () => {
                 </Box>
               ) : (
                 <VStack gap="3" w="full">
-                  {talents.map((talent) => (
+                  {selectedTalentNames.map((talentName, index) => (
                     <HStack
-                      key={talent.id}
+                      key={`${talentName}-${index}`}
                       w="full"
                       p="4"
                       bg="gray.50"
@@ -138,10 +159,7 @@ export const RegisterLearningTalentPage = () => {
                     >
                       <VStack align="start" gap="1">
                         <Text fontSize="md" color="gray.800" fontWeight="medium">
-                          {talent.name}
-                        </Text>
-                        <Text fontSize="sm" color="gray.500">
-                          {talent.categoryName}
+                          {talentName}
                         </Text>
                       </VStack>
                       <IconButton
@@ -149,7 +167,7 @@ export const RegisterLearningTalentPage = () => {
                         size="sm"
                         variant="ghost"
                         color="gray.400"
-                        onClick={() => removeTalent(talent.id)}
+                        onClick={() => removeTalent(`talent-${index}`, talentName)}
                       >
                         ×
                       </IconButton>
@@ -162,7 +180,6 @@ export const RegisterLearningTalentPage = () => {
           
           {/* 버튼 영역 */}
           <VStack w="full" px="2" pb="4" gap="3">
-            {/* 재능 추가 버튼 */}
             <Button
               onClick={handleAddTalent}
               bg="white"
@@ -187,18 +204,18 @@ export const RegisterLearningTalentPage = () => {
               </HStack>
             </Button>
             
-            {/* 완료 버튼 */}
             <Button
               onClick={handleContinue}
-              disabled={talents.length === 0}
-              bg={talents.length > 0 ? "green.400" : "gray.300"}
+              disabled={selectedTalentNames.length === 0 || isLoading}
+              loading={isLoading}
+              bg={selectedTalentNames.length > 0 && !isLoading ? "green.400" : "gray.300"}
               color="white"
               w="full"
               h="48px"
               fontSize="md"
               fontWeight="semibold"
               borderRadius="full"
-              _hover={talents.length > 0 ? { 
+              _hover={selectedTalentNames.length > 0 && !isLoading ? { 
                 bg: "green.500",
                 transform: "translateY(-1px)", 
                 boxShadow: "lg" 
@@ -210,44 +227,24 @@ export const RegisterLearningTalentPage = () => {
               }}
               transition="all 0.2s"
             >
-              완료
+              {isLoading ? '가입 중...' : '완료'}
             </Button>
           </VStack>
         </VStack>
       </Container>
 
       {/* 성공 모달 */}
-      <CommonModal
-        isOpen={open}
-        onClose={handleModalComplete}
-        confirmText="완료"
-        showCancel={false}
-        onConfirm={handleModalComplete}
-      >
-        <VStack align="center" gap="6" py="4">
-          <Box 
-            w="80px" 
-            h="80px" 
-            bg="green.500" 
-            borderRadius="full"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <Box fontSize="40px" color="white">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-              </svg>
-            </Box>
-          </Box>
-          <VStack gap="2" textAlign="center">
-            <Text fontSize="xl" fontWeight="bold" color="gray.800">
-              회원가입이
-            </Text>
-            <Text fontSize="xl" fontWeight="bold" color="gray.800">
-              완료되었습니다!
-            </Text>
-          </VStack>
+      <CommonModal isOpen={isOpen} onClose={onClose}>
+        <VStack gap="4" textAlign="center">
+          <Heading size="md" color="gray.800">
+            회원가입 완료!
+          </Heading>
+          <Text fontSize="sm" color="gray.600">
+            성공적으로 가입되었습니다.
+          </Text>
+          <Button onClick={handleModalComplete} bg="green.500" color="white" w="full">
+            확인
+          </Button>
         </VStack>
       </CommonModal>
     </>

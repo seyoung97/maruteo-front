@@ -1,10 +1,40 @@
 // Query Keys for React Query
 // 타입 안전성과 계층적 구조를 위한 쿼리 키 정의
 
+// src/services/queryKeys.ts
 export const AUTH_QUERY_KEY = {
   all: ['auth'] as const,
+  
+  // 사용자 정보 관련
   user: () => ['auth', 'user'] as const,
-  profile: () => ['auth', 'profile'] as const,
+  currentUser: () => ['auth', 'current-user'] as const,
+  
+  // 회원가입 관련
+  register: {
+    all: () => ['auth', 'register'] as const,
+    validation: (field: string) => ['auth', 'register', 'validation', field] as const,
+    emailCheck: (email: string) => ['auth', 'register', 'email-check', email] as const,
+    usernameCheck: (username: string) => ['auth', 'register', 'username-check', username] as const,
+    progress: () => ['auth', 'register', 'progress'] as const,
+  },
+  
+  // 프로필 관련
+  profile: {
+    all: () => ['auth', 'profile'] as const,
+    basic: () => ['auth', 'profile', 'basic'] as const,
+    talents: () => ['auth', 'profile', 'talents'] as const,
+    image: () => ['auth', 'profile', 'image'] as const,
+  },
+  
+  // 로그인/인증 관련
+  login: () => ['auth', 'login'] as const,
+  logout: () => ['auth', 'logout'] as const,
+  refresh: () => ['auth', 'refresh'] as const,
+  
+  // 권한/상태 관련
+  authStatus: () => ['auth', 'status'] as const,
+  permissions: (userId?: string) => 
+    userId ? ['auth', 'permissions', userId] as const : ['auth', 'permissions'] as const,
 };
 
 export const CLASS_QUERY_KEY = {
