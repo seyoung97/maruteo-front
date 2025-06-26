@@ -18,14 +18,22 @@ export interface LoginResponse {
 }
 
 export interface RegisterRequest {
-  email: string;
-  password: string;
+  role: string;
   name: string;
-  userType: 'elder' | 'young';
+  email: string;
   phone: string;
-  birthDate: string;
-  passwordConfirm: string;
+  birth: string;
+  password: string;
+  confirm_password: string;
+  gender: string;
+  address: string;
+  bio: string;
+  username: string;
+  profile_image: string;
+  have_talents: string[];
+  want_talents: string[];
 }
+
 
 export interface User {
   id: string;
@@ -53,9 +61,7 @@ export const authService = {
     const response = await apiClient.post<LoginResponse>('/api/register', data);
     const { accessToken } = response.data;
     
-    // 토큰 저장
     tokenManager.setAccessToken(accessToken);
-    
     return response.data;
   },
 

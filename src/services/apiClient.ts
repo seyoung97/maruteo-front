@@ -2,8 +2,10 @@ import type { InternalAxiosRequestConfig } from 'axios';
 import axios, { AxiosError } from 'axios';
 
 import appConfig from '../config';
+import { transformAxiosError } from './errorUtils';
 import { AuthErrorType, createApiError } from './types';
 
+// 개발/프로덕션 환경 모두 절대 URL 사용
 export const baseURL = appConfig.API_URL;
 
 // 토큰 관리 유틸리티 - Access 토큰만 사용
@@ -45,13 +47,20 @@ export const tokenManager = {
 const apiClient = axios.create({
   baseURL,
   timeout: 10000,
+  withCredentials: true, // 쿠키 포함하여 요청
 });
 
 // Request Interceptor: 모든 요청에 자동으로 토큰 추가
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     // 인증이 필요없는 엔드포인트 (화이트리스트)
-    const publicEndpoints = ['/api/login', '/api/register'];
+    const publicEndpoints = [
+      '/api/login', 
+      '/api/register',
+      '/api/auth/login',
+      '/api/auth/register',
+      '/api/public'  // 공개 API 경로 추가
+    ];
     const isPublicEndpoint = publicEndpoints.some(endpoint => 
       config.url?.includes(endpoint)
     );
@@ -84,9 +93,17 @@ apiClient.interceptors.response.use(
     if (error.response?.status === 401) {
       tokenManager.removeAccessToken();
       
-      // 로그인 페이지로 리다이렉트
-      if (typeof window !== 'undefined' && !window.location.pathname.includes('/auth/')) {
-        window.location.href = '/auth/login';
+      // 로그인 페이지로 리다이렉트 (현재 경로가 인증 관련 페이지가 아닌 경우에만)
+      if (typeof window !== 'undefined') {
+        const currentPath = window.location.pathname;
+        const authPaths = ['/auth/login', '/auth/register', '/auth'];
+        const isOnAuthPage = authPaths.some(path => currentPath.startsWith(path));
+        
+        if (!isOnAuthPage) {
+          // 현재 페이지 정보를 저장하여 로그인 후 돌아올 수 있도록 함
+          sessionStorage.setItem('redirectAfterLogin', currentPath);
+          window.location.href = '/auth/login';
+        }
       }
       
       return Promise.reject(createApiError.auth(AuthErrorType.TOKEN_EXPIRED, 401));
@@ -97,8 +114,8 @@ apiClient.interceptors.response.use(
       return Promise.reject(createApiError.auth(AuthErrorType.PERMISSION_DENIED, 403));
     }
 
-    // 기타 에러는 그대로 전달
-    return Promise.reject(error);
+    // 기타 에러는 transformAxiosError를 통해 적절한 ApiError로 변환
+    return Promise.reject(transformAxiosError(error));
   }
 );
 
