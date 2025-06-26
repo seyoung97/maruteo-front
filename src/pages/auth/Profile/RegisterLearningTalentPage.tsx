@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import TalentSelector from '../../../components/TalentSelector/TalentSelector';
 import type { SelectedTalent } from '../../../services/talentTypes';
 
-export const RegisterTalentPage = () => {
+export const RegisterLearningTalentPage = () => {
   const navigate = useNavigate();
   const [talents, setTalents] = useState<SelectedTalent[]>([]);
   const [showTalentSelector, setShowTalentSelector] = useState(false);
@@ -47,7 +47,7 @@ export const RegisterTalentPage = () => {
 
   const handleContinue = () => {
     // TODO: 다음 페이지로 이동 (예: 프로필 완성 페이지)
-    console.log('등록된 재능:', talents);
+    console.log('배우고 싶은 재능:', talents);
     // navigate('/profile/complete'); // 실제 경로로 변경 필요
   };
 
@@ -94,10 +94,10 @@ export const RegisterTalentPage = () => {
           {/* 제목 */}
           <VStack gap="3" textAlign="left" w="full">
             <Heading size="lg" color="gray.800" fontWeight="bold" alignSelf="flex-start">
-              재능 등록
+              배우고 싶은 재능 등록
             </Heading>
             <Text fontSize="md" color="gray.600" alignSelf="flex-start">
-              기부할 재능을 등록해 주세요
+              배우고 싶은 재능을 등록해 주세요
             </Text>
           </VStack>
           
@@ -112,7 +112,7 @@ export const RegisterTalentPage = () => {
                 justifyContent="center"
                 color="gray.400"
               >
-                <Text fontSize="sm">등록된 재능이 없습니다</Text>
+                <Text fontSize="sm">배우려는 재능이 없습니다</Text>
               </Box>
             ) : (
               <VStack gap="3" w="full">
@@ -201,7 +201,7 @@ export const RegisterTalentPage = () => {
             }}
             transition="all 0.2s"
           >
-            계속
+            완료
           </Button>
         </VStack>
       </VStack>
@@ -209,4 +209,4 @@ export const RegisterTalentPage = () => {
   );
 };
 
-export default RegisterTalentPage;
+export default RegisterLearningTalentPage;
