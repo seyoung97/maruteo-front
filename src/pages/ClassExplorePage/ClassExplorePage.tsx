@@ -27,9 +27,9 @@ const ClassExplorePage = () => {
     : [];
 
   return (
-    <Box minH="100vh" bg="#fff" py={4} px={2}>
+    <Box bg="#fff" px={2}>
       {/* 검색창 */}
-      <InputGroup mb={4} w="100%">
+      <InputGroup mb={2} w="100%">
         <Input
           placeholder="빠르게 찾기"
           value={search}
@@ -37,16 +37,16 @@ const ClassExplorePage = () => {
           bg="#d6f5d6"
           borderRadius="full"
           fontWeight="bold"
-          fontSize="lg"
-          h="48px"
-          pl={6}
+          fontSize="md"
+          h="40px"
+          pl={4}
           _placeholder={{ color: 'green.700', fontWeight: 'bold' }}
         />
       </InputGroup>
       {/* 2단 컬럼: 좌측 큰 범주, 우측 세부 재능 */}
-      <HStack align="start" gap={8} w="100%" maxW="400px" mx="auto" mt={8}>
+      <HStack align="start" gap={4} w="100%" maxW="400px" mx="auto" mt={2}>
         {/* 왼쪽: 큰 범주 */}
-        <VStack align="stretch" gap={0} w="140px">
+        <VStack align="stretch" gap={0} w="120px">
           {filteredMain.map(cat => (
             <Button
               key={cat.key}
@@ -56,8 +56,8 @@ const ClassExplorePage = () => {
               fontWeight={selectedMain === cat.key ? 'bold' : 'normal'}
               color="black"
               borderRadius="md"
-              h="40px"
-              px={4}
+              h="32px"
+              px={3}
               onClick={() => setSelectedMain(cat.key)}
               _hover={{ bg: 'gray.200' }}
             >
@@ -66,7 +66,7 @@ const ClassExplorePage = () => {
           ))}
         </VStack>
         {/* 오른쪽: 세부 재능 */}
-        <VStack align="stretch" gap={0} w="140px">
+        <VStack align="stretch" gap={0} w="120px">
           {filteredSubs.length ? (
             filteredSubs.map(sub => (
               <Button
@@ -75,8 +75,8 @@ const ClassExplorePage = () => {
                 justifyContent="flex-start"
                 color="black"
                 borderRadius="md"
-                h="40px"
-                px={4}
+                h="32px"
+                px={3}
                 onClick={() => navigate(`/class-explore/${sub}`)}
                 _hover={{ bg: 'gray.100' }}
               >
@@ -84,7 +84,7 @@ const ClassExplorePage = () => {
               </Button>
             ))
           ) : (
-            <Box color="gray.400" h="40px" px={4} display="flex" alignItems="center">
+            <Box color="gray.400" h="32px" px={3} display="flex" alignItems="center">
               세부 재능 없음
             </Box>
           )}

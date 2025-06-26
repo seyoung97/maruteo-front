@@ -61,7 +61,6 @@ const ClassDetailPage = () => {
 
   return (
     <Box p={4}>
-      <Text fontWeight="bold" fontSize="xl" mb={6}>{cls.title}</Text>
       {/* 이미지/영상 영역 */}
       <Box position="relative" mb={3}>
         {/* 여러 장 이미지 지원 */}

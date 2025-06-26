@@ -38,28 +38,28 @@ const OneMonthApplyPage = () => {
   };
 
   return (
-    <Container bg="white" minH="100vh" maxW="480px" px="4">
-      <VStack gap="8" justify="center" minH="100vh" py="8">
+    <Container bg="white" maxW="480px" px="4">
+      <VStack gap="4" justify="flex-start" align="stretch">
         {/* 헤더 */}
-        <VStack gap="3" textAlign="center">
+        <VStack gap="2" textAlign="center" mt={4}>
           <Heading size="lg" color="green.500" fontWeight="bold">
             신청하기
           </Heading>
         </VStack>
         {/* 안내 텍스트 */}
-        <VStack gap="2" textAlign="center" px="4">
+        <VStack gap="1" textAlign="center" px="4">
           <Text fontSize="lg" fontWeight="semibold" color="gray.800">
             한 달 살이 신청 정보를 입력해주세요
           </Text>
         </VStack>
         {/* 신청 폼 */}
-        <Box w="full" p="6">
+        <Box w="full" p="2">
           <form onSubmit={handleSubmit}>
-            <VStack gap="6">
+            <VStack gap="3">
               <ProfileImageUpload
                 value={profileImage}
                 onChange={setProfileImage}
-                size="96px"
+                size="72px"
               />
               <ValidationInput
                 id="name"
@@ -114,13 +114,13 @@ const OneMonthApplyPage = () => {
                 color="#226B3A"
                 loading={isLoading}
                 w="full"
-                h="48px"
-                fontSize="lg"
+                h="44px"
+                fontSize="md"
                 fontWeight="bold"
                 borderRadius="2xl"
                 _hover={{ bg: '#c8eac8' }}
                 transition="all 0.2s"
-                mt="4"
+                mt="2"
               >
                 계속
               </Button>
