@@ -14,6 +14,8 @@ import {
   OneMonthWantTalentPage,
   OneMonthCompletePage
 } from '@/pages/OneMonthPage';
+import { RegisterClassPage } from '@/pages/ClassRegisterPage';
+import ClassApplyPage from '@/pages/ClassApplyPage/ClassApplyPage';
 import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
 
 const router = createBrowserRouter(
@@ -39,6 +41,7 @@ const router = createBrowserRouter(
           return giver ? `${giver.username}` : '';
         }}} />
         <Route path="class/:id" element={<ClassDetailPage />} handle={{ title: "수업 상세 안내" }} />
+        <Route path="class/:id/apply" element={<ClassApplyPage />} />
         <Route path="class-explore" element={<ClassExplorePage />} handle={{ title: "재능 탐색" }} />
         <Route path="class-explore/:category" element={<ClassExploreCategoryPage />} handle={{ title: ":category" }} />
         <Route path="class-explore/:category/givers" element={<ClassExploreGiverListPage />} handle={{ title: ":category 재능 기부자" }} />
@@ -46,6 +49,7 @@ const router = createBrowserRouter(
         <Route path="one-month" element={<OneMonthMainPage />} handle={{ title: "의성 한 달 살이" }} />
         <Route path="one-month/apply" element={<OneMonthApplyPage />} handle={{ title: "신청하기" }} />
         <Route path="one-month/complete" element={<OneMonthCompletePage />} handle={{ title: "완료" }} />
+        <Route path="class-register" element={<RegisterClassPage />} />
       </Route>
       {/* Chat 관련 페이지들은 상단바/하단바 없이 풀스크린 */}
       <Route path='chat' element={<ChatPage/>}/>

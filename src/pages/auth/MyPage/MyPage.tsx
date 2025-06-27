@@ -1,9 +1,10 @@
-import { Box, Button, Container, Text, VStack, Flex, HStack } from '@chakra-ui/react';
+import { Box, Button, Container, Text, VStack, Flex, HStack, Image } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FiShare2, FiArrowLeft } from 'react-icons/fi';
 import { CustomBadge } from '@/components/ui/Badge';
 import { StarRating } from '@/components/Icon';
+import { getMyLessons } from '@/services/classGiverExploreServices';
 
 // mock 데이터
 const mockProfile = {
@@ -14,8 +15,6 @@ const mockProfile = {
   talents: ['요리', '기타'],
   wantTalents: ['영어', '프로그래밍'],
   point: 250,
-  myClasses: [],
-  myLectures: [],
   badge: '청년기부자',
   type: 'youth',
   isExcellentBadge: true,
@@ -25,6 +24,15 @@ export function MyPage() {
   const navigate = useNavigate();
   const [profile] = useState<any>(mockProfile);
   const [tabIdx, setTabIdx] = useState(0);
+  const [myLessons, setMyLessons] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getMyLessons().then((data) => {
+      setMyLessons(data);
+      setLoading(false);
+    });
+  }, []);
 
   return (
     <Container bg="#FAFAF9" minH="100vh" maxW="480px" px="0" py="0">
@@ -150,13 +158,40 @@ export function MyPage() {
           </Flex>
           <Box>
             {tabIdx === 0 ? (
-              <Text color="gray.400" textAlign="center" py={8}>등록된 수업이 없습니다.</Text>
+              loading ? (
+                <Text color="gray.400" textAlign="center" py={8}>로딩 중...</Text>
+              ) : myLessons.length === 0 ? (
+                <Text color="gray.400" textAlign="center" py={8}>등록된 수업이 없습니다.</Text>
+              ) : (
+                <VStack gap={4}>
+                  {myLessons.map((lesson) => (
+                    <Box key={lesson.id} borderRadius="lg" boxShadow="md" p={4} w="100%" bg="#F0FDF4">
+                      <Flex align="center" gap={4}>
+                        {lesson.media_url && (
+                          <Image src={lesson.media_url} alt={lesson.title} boxSize="80px" borderRadius="md" objectFit="cover" />
+                        )}
+                        <Box flex={1}>
+                          <Text fontWeight="bold" fontSize="lg" color="green.900">{lesson.title}</Text>
+                          <Box color="gray.700" fontSize="sm" style={{
+                            display: '-webkit-box',
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: 'vertical',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                          }}>{lesson.description}</Box>
+                          <Text color="gray.500" fontSize="xs">{lesson.location}</Text>
+                        </Box>
+                      </Flex>
+                    </Box>
+                  ))}
+                </VStack>
+              )
             ) : (
               <Text color="gray.400" textAlign="center" py={8}>수강 내역이 없습니다.</Text>
             )}
           </Box>
           {/* 수업 추가 버튼 */}
-          <Button w="100%" h="44px" bg="#22D060" color="white" borderRadius="2xl" fontWeight="bold" fontSize="md" mt={2} _hover={{ bg: '#16A34A' }}>
+          <Button w="100%" h="44px" bg="#22D060" color="white" borderRadius="2xl" fontWeight="bold" fontSize="md" mt={2} _hover={{ bg: '#16A34A' }} onClick={() => navigate('/class-register')}>
             + 수업 추가
           </Button>
         </VStack>

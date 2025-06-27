@@ -1,0 +1,1 @@
+export { default as RegisterClassPage } from './RegisterClassPage'; 

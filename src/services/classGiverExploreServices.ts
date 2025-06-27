@@ -262,4 +262,29 @@ export const getMyInfo = async () => {
 export const getTalentList = async () => {
   const { data } = await apiClient.get<TalentListResponse>('/talents');
   return data;
+};
+
+// 내가 등록한 재능 목록 불러오기
+export const getMyTalents = async () => {
+  const res = await apiClient.get('/my-talents');
+  return res.data;
+};
+
+// 내가 등록한 수업 목록 불러오기
+export const getMyLessons = async () => {
+  const res = await apiClient.get('/api/lesson');
+  return res.data;
+};
+
+// 수업 등록
+export const registerClass = async (form: any) => {
+  const formData = new FormData();
+  Object.entries(form).forEach(([key, value]) => {
+    if (value instanceof File) {
+      formData.append(key, value);
+    } else if (value !== null && value !== undefined) {
+      formData.append(key, String(value));
+    }
+  });
+  await apiClient.post('/classes', formData);
 }; 
