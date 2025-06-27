@@ -1,4 +1,4 @@
-import { HStack, Box } from '@chakra-ui/react';
+import { HStack, Box, Flex } from '@chakra-ui/react';
 import { FaStar } from 'react-icons/fa';
 
 interface StarRatingProps {
@@ -9,23 +9,40 @@ interface StarRatingProps {
 
 const StarRating = ({ value, max = 5, size = '1.25em' }: StarRatingProps) => {
   return (
-    <HStack gap={0.5}>
-      {Array.from({ length: max }).map((_, i) => {
-        const filled = value >= i + 1;
-        const half = !filled && value > i && value < i + 1;
-        return (
+    <Box position="relative" width="fit-content">
+      {/* 연한 별들 (기본 배경) */}
+      <HStack gap={0.5} position="absolute" top={0} left={0}>
+        {Array.from({ length: max }).map((_, i) => (
           <Box
-            key={i}
-            color={filled || half ? 'yellow.400' : 'gray.300'}
+            key={`bg-${i}`}
+            color="gray.200"
             width={size}
             height={size}
-            opacity={half ? 0.5 : 1}
           >
             <FaStar size="100%" />
           </Box>
-        );
-      })}
-    </HStack>
+        ))}
+      </HStack>
+      
+      {/* 진한 별들 (별점에 맞게) */}
+      <HStack gap={0.5} position="relative" zIndex={1}>
+        {Array.from({ length: max }).map((_, i) => {
+          const filled = value >= i + 1;
+          const half = !filled && value > i && value < i + 1;
+          return (
+            <Box
+              key={`fg-${i}`}
+              color={filled || half ? 'yellow.400' : 'transparent'}
+              width={size}
+              height={size}
+              opacity={half ? 0.5 : 1}
+            >
+              <FaStar size="100%" />
+            </Box>
+          );
+        })}
+      </HStack>
+    </Box>
   );
 };
 

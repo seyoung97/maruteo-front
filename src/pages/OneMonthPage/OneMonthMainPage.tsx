@@ -8,7 +8,6 @@ const OneMonthMainPage = () => {
     <Box
       maxW="480px"
       mx="auto"
-      minH="100vh"
       borderRadius="2xl"
       overflow="hidden"
       boxShadow="md"
@@ -22,14 +21,14 @@ const OneMonthMainPage = () => {
         backgroundRepeat: 'no-repeat',
       }}
     >
-      {/* 텍스트 박스 (배경 없음) */}
+      {/* 텍스트 박스 */}
       <Box
         position="relative"
         zIndex={2}
         px={6}
-        pt={8}
-        pb={4}
-        mt={8}
+        pt={4}
+        pb={2}
+        mt={4}
         mx={4}
         borderRadius="2xl"
       >
@@ -42,8 +41,8 @@ const OneMonthMainPage = () => {
           메이드인피플이 운영하는 게스트하우스 숙박이 제공됩니다.
         </Text>
       </Box>
-      {/* 하단 버튼 (배경 없음) */}
-      <Box position="absolute" left={0} right={0} bottom={80} zIndex={2} display="flex" justifyContent="center">
+      {/* 하단 버튼 */}
+      <Box position="relative" zIndex={2} display="flex" justifyContent="center" mt={2} mb={4}>
         <Button
           bg="#DFF5DF"
           color="#226B3A"
@@ -51,7 +50,7 @@ const OneMonthMainPage = () => {
           fontSize="lg"
           borderRadius="2xl"
           px={12}
-          py={6}
+          py={4}
           _hover={{ bg: '#c8eac8' }}
           boxShadow="md"
           onClick={() => navigate('/one-month/apply')}

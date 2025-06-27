@@ -70,6 +70,15 @@ export const RECOMMEND_QUERY_KEY = {
     userId ? ['recommendation', 'user', userId] as const : ['recommendation', 'user'] as const,
 };
 
+export const CLASS_LIST = ['classList'];
+export const GIVER_LIST = ['giverList'];
+export const CLASS_DETAIL = (id: number) => ['classDetail', id];
+export const GIVER_DETAIL = (id: number) => ['giverDetail', id];
+
+export const USER_WANT_TALENTS = ['userWantTalents'];
+export const MY_INFO = ['myInfo'];
+export const TALENT_LIST = ['talentList'];
+
 // 사용 예시:
 // useQuery({ queryKey: CLASS_QUERY_KEY.detail(1), queryFn: ... })
 // useQuery({ queryKey: CLASS_QUERY_KEY.list({ category: 'cooking' }), queryFn: ... })
