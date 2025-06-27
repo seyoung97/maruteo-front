@@ -1,9 +1,18 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Container, SimpleGrid, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { CommonCard } from '../components/Card';
 import Carousel from '../components/ui/Carousel';
 import { TALENT_CATEGORIES } from "../data/talentData";
+
+// 찜한 수업 더미 데이터
+const likedClasses = [
+  { id: 1, title: '할머니표 마늘닭볶음', thumbnail: '/class1.jpg', garlic: 120, rating: 4.7, badge: '청년', type: 'youth' },
+  { id: 2, title: '의성마늘불고기 배우기', thumbnail: '/class2.jpg', garlic: 98, rating: 4.5, badge: '청년', type: 'youth' },
+  { id: 3, title: '된장국 클래스', thumbnail: '/class3.jpg', garlic: 80, rating: 4.3, badge: '청년', type: 'youth' },
+  { id: 4, title: '김치찌개 클래스', thumbnail: '/class4.jpg', garlic: 60, rating: 4.1, badge: '청년', type: 'youth' },
+];
 
 const HomePage = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('');
@@ -43,9 +52,32 @@ const HomePage = () => {
       </CategoryTabContainer>
 
       {/* 메인 콘텐츠 영역 */}
-      <MainContent>
-      <Carousel />
-      </MainContent>
+      <Container>
+        <Text textStyle="xl" fontWeight="bold" color="#000" ml={1} mb={2} mt={2}>
+          인기 수업
+        </Text>
+        <Carousel />
+        
+        {/* 찜한 수업 섹션 */}
+        <Text textStyle="xl" fontWeight="bold" color="#000" ml={1} mb={2} mt={6}>
+          찜한 수업
+        </Text>
+        <SimpleGrid columns={2} gap={4} mb={4}>
+          {likedClasses.map((cls) => (
+            <CommonCard
+              key={cls.id}
+              thumbnail={cls.thumbnail}
+              title={cls.title}
+              garlicCount={cls.garlic}
+              rating={cls.rating}
+              badgeText={cls.badge === '청년' ? '청년기부자' : cls.badge}
+              type={cls.type}
+              onClick={() => {}}
+            />
+          ))}
+        </SimpleGrid>
+      </Container>
+      
     </Box>
   )
 }
@@ -103,11 +135,6 @@ const CategoryTab = styled.button<{ isActive: boolean }>`
   &:last-child {
     margin-right: 20px; /* 마지막 탭에 여백 추가 */
   }
-`;
-
-const MainContent = styled.div`
-  background: #f9f9f9;
-  min-height: calc(100vh - 80px);
 `;
 
 export default HomePage;

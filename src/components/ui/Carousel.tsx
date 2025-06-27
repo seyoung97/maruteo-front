@@ -59,6 +59,7 @@ const Carousel = () => {
 const CarouselWrapper = styled.div`
   width: 100%;
   max-width: 100vw;
+  height: 320px;
   aspect-ratio: 16/7;
   margin: 0 auto 24px auto;
   position: relative;
@@ -69,13 +70,13 @@ const CarouselWrapper = styled.div`
 
 const SlideBox = styled.div`
   width: 100%;
-  height: 100%;
+  height: 320px;
   position: relative;
 `;
 
 const ImageBox = styled.div`
   width: 100%;
-  height: 220px;
+  height: 320px;
   position: relative;
   overflow: hidden;
   border-radius: 24px;
