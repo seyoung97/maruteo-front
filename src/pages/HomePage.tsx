@@ -1,7 +1,8 @@
-import { Box, Heading, Text } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { useState } from "react";
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from 'swiper/react';
+import Carousel from '../components/ui/Carousel';
 import { TALENT_CATEGORIES } from "../data/talentData";
 
 const HomePage = () => {
@@ -9,6 +10,8 @@ const HomePage = () => {
 
   return (
     <Box>
+      {/* 상단 카테고리별 인기수업 Carousel */}
+      
       {/* 상단 카테고리 탭 */}
       <CategoryTabContainer>
         <Swiper
@@ -41,33 +44,7 @@ const HomePage = () => {
 
       {/* 메인 콘텐츠 영역 */}
       <MainContent>
-        <Box p={8}>
-          <Heading mb={4}>마루테오 홈 🎉</Heading>
-          <Text color="fg.muted">
-            선택된 카테고리: {selectedCategory ? TALENT_CATEGORIES.find(cat => cat.id === selectedCategory)?.name || '전체' : '전체'}
-          </Text>
-          
-          {/* 카테고리별 콘텐츠 영역 */}
-          <Box mt={6}>
-            <Text fontSize="lg" fontWeight="bold" mb={4}>
-              {selectedCategory ? TALENT_CATEGORIES.find(cat => cat.id === selectedCategory)?.name : '전체'} 카테고리
-            </Text>
-            <Box 
-              bg="white" 
-              p={6} 
-              borderRadius="lg" 
-              boxShadow="sm"
-              minH="400px"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <Text color="gray.500">
-                {selectedCategory ? `${TALENT_CATEGORIES.find(cat => cat.id === selectedCategory)?.name} 관련 콘텐츠가 여기에 표시됩니다.` : '모든 카테고리의 콘텐츠가 여기에 표시됩니다.'}
-              </Text>
-            </Box>
-          </Box>
-        </Box>
+      <Carousel />
       </MainContent>
     </Box>
   )
