@@ -57,8 +57,8 @@ apiClient.interceptors.request.use(
     const publicEndpoints = [
       '/api/login', 
       '/api/register',
-      '/api/auth/login',
-      '/api/auth/register',
+      '/api/login',
+      '/api/register',
       '/api/public'  // 공개 API 경로 추가
     ];
     const isPublicEndpoint = publicEndpoints.some(endpoint => 
@@ -94,17 +94,17 @@ apiClient.interceptors.response.use(
       tokenManager.removeAccessToken();
       
       // 로그인 페이지로 리다이렉트 (현재 경로가 인증 관련 페이지가 아닌 경우에만)
-      if (typeof window !== 'undefined') {
-        const currentPath = window.location.pathname;
-        const authPaths = ['/auth/login', '/auth/register', '/auth'];
-        const isOnAuthPage = authPaths.some(path => currentPath.startsWith(path));
-        
-        if (!isOnAuthPage) {
-          // 현재 페이지 정보를 저장하여 로그인 후 돌아올 수 있도록 함
-          sessionStorage.setItem('redirectAfterLogin', currentPath);
-          window.location.href = '/auth/login';
-        }
-      }
+      // if (typeof window !== 'undefined') {
+      //   const currentPath = window.location.pathname;
+      //   const authPaths = ['/login', '/register', '/'];
+      //   const isOnAuthPage = authPaths.some(path => currentPath.startsWith(path));
+      //   
+      //   if (!isOnAuthPage) {
+      //     // 현재 페이지 정보를 저장하여 로그인 후 돌아올 수 있도록 함
+      //     sessionStorage.setItem('redirectAfterLogin', currentPath);
+      //     window.location.href = '/login';
+      //   }
+      // }
       
       return Promise.reject(createApiError.auth(AuthErrorType.TOKEN_EXPIRED, 401));
     }
