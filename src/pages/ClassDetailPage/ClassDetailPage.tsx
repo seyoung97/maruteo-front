@@ -102,7 +102,7 @@ const ClassDetailPage = () => {
       </Box>
       {/* 영상 밑 초록색 박스 */}
       <Box bg="#16A34A" color="white" borderRadius="lg" py={3} px={4} mb={4} display="flex" alignItems="center" justifyContent="space-between">
-        <Text fontWeight="bold" fontSize="lg" noOfLines={1}>{cls.title}</Text>
+        <Text fontWeight="bold" fontSize="lg" isTruncated>{cls.title}</Text>
         <Flex align="center" gap={3}>
           <Box color="white">
             <StarRating value={cls.rating} size="1.2em" />

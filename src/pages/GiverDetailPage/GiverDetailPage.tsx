@@ -229,7 +229,7 @@ const GiverDetailPage = () => {
                         leftIcon={<FiHeart size={20} />}
                         _hover={{ bg: '#86EFAC' }}
                       >
-                        찜하기
+                        <FiHeart size={20} />찜하기
                       </Button>
                       <Button
                         flex={1}
@@ -244,7 +244,7 @@ const GiverDetailPage = () => {
                         bg="white"
                         _hover={{ bg: '#E0F2F1' }}
                       >
-                        신청하기
+                        <FiCheckCircle size={20} />수업 신청
                       </Button>
                     </Flex>
                   </Box>

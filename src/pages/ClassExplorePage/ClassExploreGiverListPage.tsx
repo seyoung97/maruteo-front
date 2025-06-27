@@ -135,13 +135,7 @@ const ClassExploreGiverListPage = () => {
             (giver.attendanceRate ?? 0) >= 90;
           return (
             <Box bg="green.50" borderRadius="lg" p={1} minW="180px" maxW="220px">
-              <CommonCard key={giver.id} thumbnail={giver.thumbnail} title={
-                <Flex align="center" gap={2}>
-                  <Text fontWeight="bold" fontSize="lg">{giver.name}</Text>
-                  {giver.type === 'youth' && <CustomBadge type="youth" />}
-                  {giver.type === 'senior' && <CustomBadge type="senior" />}
-                </Flex>
-              } subtitle={giver.username} garlicCount={giver.garlic} rating={giver.rating} badge={giver.badge} isExcellentBadge={isExcellentBadge} onClick={() => {}}>
+              <CommonCard key={giver.id} thumbnail={giver.thumbnail} title={giver.name} subtitle={giver.username} garlicCount={giver.garlic} rating={giver.rating} badgeText={giver.badge} isExcellentBadge={isExcellentBadge} onClick={() => {}}>
               </CommonCard>
             </Box>
           );
@@ -158,13 +152,7 @@ const ClassExploreGiverListPage = () => {
             (giver.attendanceRate ?? 0) >= 90;
           return (
             <Box bg="green.50" borderRadius="lg" p={1} minW="180px" maxW="220px">
-              <CommonCard key={giver.id} thumbnail={giver.thumbnail} title={
-                <Flex align="center" gap={2}>
-                  <Text fontWeight="bold" fontSize="lg">{giver.name}</Text>
-                  {giver.type === 'youth' && <CustomBadge type="youth" />}
-                  {giver.type === 'senior' && <CustomBadge type="senior" />}
-                </Flex>
-              } subtitle={giver.username} garlicCount={giver.garlic} rating={giver.rating} badge={giver.badge} isExcellentBadge={isExcellentBadge} onClick={() => {}}>
+              <CommonCard key={giver.id} thumbnail={giver.thumbnail} title={giver.name} subtitle={giver.username} garlicCount={giver.garlic} rating={giver.rating} badgeText={giver.badge} isExcellentBadge={isExcellentBadge} onClick={() => {}}>
               </CommonCard>
             </Box>
           );
@@ -181,13 +169,7 @@ const ClassExploreGiverListPage = () => {
             (giver.attendanceRate ?? 0) >= 90;
           return (
             <Box bg="green.50" borderRadius="lg" p={1} minW="180px" maxW="220px">
-              <CommonCard key={giver.id} thumbnail={giver.thumbnail} title={
-                <Flex align="center" gap={2}>
-                  <Text fontWeight="bold" fontSize="lg">{giver.name}</Text>
-                  {giver.type === 'youth' && <CustomBadge type="youth" />}
-                  {giver.type === 'senior' && <CustomBadge type="senior" />}
-                </Flex>
-              } subtitle={giver.username} garlicCount={giver.garlic} rating={giver.rating} badge={giver.badge} isExcellentBadge={isExcellentBadge} onClick={() => {}}>
+              <CommonCard key={giver.id} thumbnail={giver.thumbnail} title={giver.name} subtitle={giver.username} garlicCount={giver.garlic} rating={giver.rating} badgeText={giver.badge} isExcellentBadge={isExcellentBadge} onClick={() => {}}>
               </CommonCard>
             </Box>
           );
@@ -206,13 +188,7 @@ const ClassExploreGiverListPage = () => {
             ['상', '중', '하'].includes(giver.readiness ?? '') &&
             (giver.attendanceRate ?? 0) >= 90;
           return (
-            <CommonCard key={giver.id} thumbnail={giver.thumbnail} title={
-              <Flex align="center" gap={2}>
-                <Text fontWeight="bold" fontSize="lg">{giver.name}</Text>
-                {giver.type === 'youth' && <CustomBadge type="youth" />}
-                {giver.type === 'senior' && <CustomBadge type="senior" />}
-              </Flex>
-            } subtitle={giver.username} garlicCount={giver.garlic} rating={giver.rating} badge={giver.badge} isExcellentBadge={isExcellentBadge} onClick={() => {}}>
+            <CommonCard key={giver.id} thumbnail={giver.thumbnail} title={giver.name} subtitle={giver.username} garlicCount={giver.garlic} rating={giver.rating} badgeText={giver.badge} isExcellentBadge={isExcellentBadge} onClick={() => {}}>
             </CommonCard>
           );
         })}
