@@ -41,6 +41,18 @@ export function LoginPage() {
     });
   };
 
+  // Google 로그인 성공 핸들러
+  // const handleGoogleSuccess = (hasCalendarPermissions: boolean) => {
+  //   console.log('Google 로그인 성공, 캘린더 권한:', hasCalendarPermissions);
+  //   // 성공 시 처리 로직 (예: 홈페이지로 이동)
+  // };
+
+  // // Google 로그인 에러 핸들러
+  // const handleGoogleError = (error: string) => {
+  //   console.error('Google 로그인 에러:', error);
+  //   // 에러 처리 로직
+  // };
+
   // 테스트 요청 함수
   const handleTestRequest = async () => {
     try {
@@ -189,19 +201,13 @@ export function LoginPage() {
           
           {/* 소셜 로그인 */}
           <VStack gap="3" pt="4" w="full">
-            <Button 
-              variant="outline" 
-              w="full" 
-              h="48px"
-              fontSize="md"
-              borderRadius="lg"
-              borderColor="gray.300"
-              color="gray.700"
-              _hover={{ bg: "gray.50" }}
-              disabled={loginMutation.isPending}
-            >
-              Google로 계속하기
-            </Button>
+            {/* Google 캘린더 통합 로그인 */}
+            {/* <GoogleCalendarAuth 
+              onSuccess={handleGoogleSuccess}
+              onError={handleGoogleError}
+              showCalendarButton={false}
+            /> */}
+            
             <Button 
               variant="outline" 
               w="full" 

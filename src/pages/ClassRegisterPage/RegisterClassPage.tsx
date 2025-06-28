@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
 import RegisterClassForm from '../../components/Class/RegisterClassForm';
-import { getMyTalents } from '../../services/classGiverExploreServices';
+import { getMyTalents, type MyTalentsResponse } from '../../services/classGiverExploreServices';
 
 const RegisterClassPage = () => {
-  const [talents, setTalents] = useState<any[]>([]);
+  const [talents, setTalents] = useState<MyTalentsResponse['data']>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
   useEffect(() => {
     getMyTalents()
       .then((data) => {
-        setTalents(Array.isArray(data) ? data : []);
+        setTalents(Array.isArray(data.data) ? data.data : []);
         setLoading(false);
       })
       .catch(() => {
