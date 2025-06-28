@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { registerClass } from '../../services/classGiverExploreServices';
+import { Box, Text, Avatar, Flex } from '@chakra-ui/react';
 
 interface RegisterClassFormProps {
   talents: { id: string; name: string }[];
@@ -16,6 +17,7 @@ const RegisterClassForm: React.FC<RegisterClassFormProps> = ({ talents }) => {
   });
   const [submitting, setSubmitting] = useState(false);
   const [showTalentSelect, setShowTalentSelect] = useState(false);
+  const [giver, setGiver] = useState<GiverProfile | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -39,6 +41,13 @@ const RegisterClassForm: React.FC<RegisterClassFormProps> = ({ talents }) => {
     setSubmitting(false);
     // TODO: 등록 후 마이페이지로 이동 또는 알림
   };
+
+  useEffect(() => {
+    // 실제 API 엔드포인트/파라미터는 명세서 참고
+    fetch('/api/giver/123')
+      .then(res => res.json())
+      .then(data => setGiver(data));
+  }, []);
 
   return (
     <form onSubmit={handleSubmit} style={{ maxWidth: 400, margin: '0 auto', background: '#fff', padding: 24, borderRadius: 16 }}>
@@ -83,6 +92,25 @@ const RegisterClassForm: React.FC<RegisterClassFormProps> = ({ talents }) => {
           </select>
         )}
       </div>
+      <Box mb={3}>
+        <Text fontWeight="bold" color="green.600" mb={1}>재능 기부자(강사) 프로필</Text>
+        {giver && (
+          <Flex align="center" gap={3} border="1px solid #B6E2B6" borderRadius={12} p={3} mb={2} bg="white" boxShadow="sm">
+            <Avatar src={giver.profileImage} name={giver.name} size="lg" border="2px solid #B6E2B6" />
+            <Box>
+              <Flex align="center" gap={2}>
+                <Text fontWeight="bold" fontSize="lg">{giver.name}</Text>
+                <Text color="gray.500" fontSize="sm">{giver.userId}</Text>
+                <Flex align="center" gap={1} ml={2}>
+                  <Text fontSize="md" color="#FACC15">⭐️</Text>
+                  <Text fontWeight="bold" fontSize="md">{giver.rating}</Text>
+                </Flex>
+              </Flex>
+              <Text color="gray.700" fontSize="sm" mt={1}>{giver.introduction}</Text>
+            </Box>
+          </Flex>
+        )}
+      </Box>
       <button type="submit" disabled={submitting} style={{ width: '100%', background: '#B6E2B6', color: '#222', padding: 12, borderRadius: 8 }}>
         {submitting ? '등록 중...' : '수업 등록'}
       </button>

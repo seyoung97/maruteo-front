@@ -1,10 +1,9 @@
 import { CommonCard } from '@/components/Card';
 import { GarlicIcon, StarRating } from '@/components/Icon';
-import { Avatar, Badge, Box, Button, Flex, Heading, HStack, SimpleGrid, Text, VStack, Container } from '@chakra-ui/react';
+import { Box, Button, Container, Flex, Heading, SimpleGrid, Text } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { useState } from 'react';
-import { FiHeart, FiCheckCircle, FiShare, FiMoreVertical, FiPlus } from 'react-icons/fi';
-import { IoArrowBack } from 'react-icons/io5';
+import { FiHeart, FiCheckCircle } from 'react-icons/fi';
 import { CustomBadge } from '@/components/ui/Badge';
 
 // 기부자 상세 페이지 - 기부자 정보, 수업 목록, 뱃지 등 표시
@@ -55,66 +54,13 @@ const dummyClasses = [
   { id: 3, title: '잡채 클래스', thumbnail: '/class3.jpg', garlic: 80, rating: 4.3, badge: '청년', type: 'youth', giverId: 2, liked: false },
 ];
 
-// 수업 카드 내 찜하기 버튼
-function ClassCardWithLike({ cls, initialLiked, initialGarlic }: { cls: any, initialLiked: boolean, initialGarlic: number }) {
-  const [liked, setLiked] = useState(initialLiked);
-  const [garlic, setGarlic] = useState(initialGarlic);
-  const handleLike = () => {
-    if (!liked) {
-      setLiked(true);
-      setGarlic(g => g + 1);
-    } else {
-      setLiked(false);
-      setGarlic(g => Math.max(0, g - 1));
-    }
-  };
-  return (
-    <Box w="100%" display="flex" flexDirection="column" alignItems="stretch">
-      <Box w="100%">
-        <CommonCard
-          thumbnail={cls.thumbnail}
-          title={cls.title}
-          garlicCount={garlic}
-          rating={cls.rating}
-          badgeText={cls.badge === '청년' ? '청년기부자' : cls.badge}
-        />
-      </Box>
-      <Button
-        mt={2}
-        w="100%"
-        bg={liked ? 'green.500' : 'gray.200'}
-        color={liked ? 'white' : 'green.800'}
-        _hover={{ bg: liked ? 'green.600' : 'gray.300' }}
-        borderRadius="lg"
-        fontWeight="bold"
-        onClick={handleLike}
-      >
-        <HStack gap={1} justify="center">
-          <GarlicIcon style={{ color: liked ? 'white' : '#6B8E23' }} />
-          <Text>{liked ? '찜 취소' : '찜하기'}</Text>
-        </HStack>
-      </Button>
-    </Box>
-  );
-}
-
 const GiverDetailPage = () => {
   const { id } = useParams();
-  const giver = dummyGivers.find(g => String(g.id) === id);
+  const giver = dummyGivers.find((g: { id: number }) => String(g.id) === id);
   const [mainLiked, setMainLiked] = useState<boolean>(false);
-  const [mainGarlic, setMainGarlic] = useState<number>(giver ? giver.garlic : 0);
-
-  // 뱃지 기준
-  const isBadge =
-    giver &&
-    giver.likeCount >= 10 &&
-    giver.classCount >= 10 &&
-    giver.activeYear >= 1 &&
-    giver.readiness === '상' &&
-    giver.attendanceRate >= 90;
 
   // 해당 기부자가 만든 수업만 필터링
-  const giverClasses = giver ? dummyClasses.filter(cls => cls.giverId === giver.id) : [];
+  const giverClasses = giver ? dummyClasses.filter((cls: { giverId: number }) => cls.giverId === giver.id) : [];
 
   return (
     <Container bg="white" minH="100vh" maxW="480px" px={0} py={0}>
@@ -135,7 +81,6 @@ const GiverDetailPage = () => {
               <Flex gap={2} mt={2}>
                 <CustomBadge type="youth" />
                 {/* 어르신 기부자라면 <CustomBadge type="senior" /> 추가 */}
-                {isBadge && <CustomBadge type="excellent" />}
               </Flex>
               {/* 별점/찜(마늘) 표시 */}
               <Flex align="center" gap={3} mt={2}>
@@ -188,10 +133,8 @@ const GiverDetailPage = () => {
             onClick={() => {
               if (!mainLiked) {
                 setMainLiked(true);
-                setMainGarlic(g => g + 1);
               } else {
                 setMainLiked(false);
-                setMainGarlic(g => Math.max(0, g - 1));
               }
             }}
           >

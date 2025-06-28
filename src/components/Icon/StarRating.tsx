@@ -1,4 +1,4 @@
-import { HStack, Box, Flex } from '@chakra-ui/react';
+import { HStack, Box } from '@chakra-ui/react';
 import { FaStar } from 'react-icons/fa';
 
 interface StarRatingProps {

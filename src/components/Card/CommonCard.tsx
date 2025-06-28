@@ -1,5 +1,5 @@
-import { Badge, Box, Flex, HStack, Image, Text } from '@chakra-ui/react';
-import { GarlicIcon, StarRating } from '../Icon';
+import { Box, Flex, Image, Text } from '@chakra-ui/react';
+import { StarRating } from '../Icon';
 import { CustomBadge } from '../ui/Badge';
 
 interface CommonCardProps {
@@ -62,7 +62,7 @@ const CommonCard = ({
           </Box>
         )}
         {typeof garlicCount === 'number' && (
-          <Text fontSize="md" color="gray.700">
+          <Text fontSize="md" color="black">
             🧄 {garlicCount}
           </Text>
         )}

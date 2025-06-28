@@ -4,7 +4,6 @@ import {
   Input,
   Button,
   VStack,
-  Container,
   Flex
 } from "@chakra-ui/react"
 import { IoArrowBack, IoVolumeHigh, IoMic, IoSend } from "react-icons/io5"

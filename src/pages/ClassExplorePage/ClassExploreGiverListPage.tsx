@@ -1,10 +1,9 @@
 import { CommonCard } from '@/components/Card';
 import { CommonSelect } from '@/components/Select';
-import { Box, Heading, Input, SimpleGrid, Text, HStack, IconButton, Flex } from '@chakra-ui/react';
+import { Box, Heading, Input, SimpleGrid, Text, HStack, IconButton } from '@chakra-ui/react';
 import { useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { LuChevronLeft, LuChevronRight } from 'react-icons/lu';
-import { CustomBadge } from '@/components/ui/Badge';
 
 const filterOptions = [
   { label: '최신순', value: 'latest' },

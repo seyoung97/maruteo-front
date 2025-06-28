@@ -3,7 +3,6 @@ import {
   Text, 
   Button, 
   VStack, 
-  Container,
   Flex
 } from "@chakra-ui/react"
 import { IoArrowBack } from "react-icons/io5"

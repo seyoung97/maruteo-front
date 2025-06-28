@@ -1,5 +1,5 @@
 import { GarlicIcon, StarRating } from '@/components/Icon';
-import { Badge, Box, Button, Flex, Heading, HStack, Image, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, HStack, Image, Text } from '@chakra-ui/react';
 import { useState } from 'react';
 import { FaPlay } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
@@ -57,7 +57,6 @@ const ClassDetailPage = () => {
   if (!cls) return <Box p={4}>존재하지 않는 수업입니다.</Box>;
 
   const giver = dummyGivers.find(g => g.id === cls.giverId);
-  const isBadge = giver && giver.likeCount >= 10 && giver.classCount >= 10 && giver.activeYear >= 1 && giver.readiness === '상' && giver.attendanceRate >= 90;
 
   return (
     <Box p={4}>

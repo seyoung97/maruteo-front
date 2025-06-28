@@ -7,10 +7,10 @@ export const PageLayout = () => {
   // useMatches를 사용하여 현재 라우트의 handle 데이터를 가져옴
   const matches = useMatches();
   const params = useParams();
-  const currentMatch = matches[matches.length - 1];
-  let title = (currentMatch?.handle as { title?: string, getTitle?: (params: any) => string })?.title || "페이지 제목";
-  if ((currentMatch?.handle as { getTitle?: (params: any) => string })?.getTitle) {
-    title = (currentMatch.handle as any).getTitle(params);
+  const currentMatch = matches[matches.length - 1] as any;
+  let title = currentMatch?.handle?.title || "페이지 제목";
+  if (currentMatch?.handle?.getTitle) {
+    title = currentMatch.handle.getTitle(params);
   }
 
   // :category 등 파라미터 치환
