@@ -26,16 +26,16 @@ const RegisterClassForm: React.FC<RegisterClassFormProps> = ({ talents }) => {
     media: null as File | null,
   });
   const [submitting, setSubmitting] = useState(false);
-  const [showTalentSelect, setShowTalentSelect] = useState(false);
+  // const [showTalentSelect, setShowTalentSelect] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleTalentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setForm({ ...form, talentId: e.target.value });
-    setShowTalentSelect(false);
-  };
+  // const handleTalentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   setForm({ ...form, talentId: e.target.value });
+  //   setShowTalentSelect(false);
+  // };
 
   const handleMediaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {

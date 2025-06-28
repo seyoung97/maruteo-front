@@ -1,5 +1,5 @@
-import { Badge, Box, Flex, HStack, Image, Text } from '@chakra-ui/react';
-import { GarlicIcon, StarRating } from '../Icon';
+import { Box, Flex, Image, Text } from '@chakra-ui/react';
+import { StarRating } from '../Icon';
 import { CustomBadge } from '../ui/Badge';
 
 interface CommonCardProps {
@@ -48,7 +48,7 @@ const CommonCard = ({
         )}
       </Box>
       <Flex align="center" mb={1} gap={2}>
-        <Text fontWeight="bold" fontSize="lg" isTruncated>{title}</Text>
+        <Text fontWeight="bold" fontSize="lg" truncate>{title}</Text>
         {((badgeText === '청년기부자' || type === 'youth') && <CustomBadge type="youth" />)}
         {((badgeText === '어르신기부자' || type === 'senior') && <CustomBadge type="senior" />)}
       </Flex>
