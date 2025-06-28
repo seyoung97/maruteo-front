@@ -1,9 +1,9 @@
-import { 
-  Box, 
-  Text, 
-  Button, 
-  VStack, 
-  Flex
+import {
+  Box,
+  Button,
+  Flex,
+  Text,
+  VStack
 } from "@chakra-ui/react"
 import { IoArrowBack } from "react-icons/io5"
 import { useNavigate } from "react-router-dom"

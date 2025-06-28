@@ -55,10 +55,10 @@ apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     // 인증이 필요없는 엔드포인트 (화이트리스트)
     const publicEndpoints = [
-      '/api/login', 
-      '/api/register',
-      '/api/login',
-      '/api/register',
+      '/api/auth/login', 
+      '/api/auth/register',
+      '/api/auth/login',
+      '/api/auth/register',
       '/api/public'  // 공개 API 경로 추가
     ];
     const isPublicEndpoint = publicEndpoints.some(endpoint => 

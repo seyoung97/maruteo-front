@@ -47,7 +47,7 @@ export interface User {
 export const authService = {
   // 로그인
   login: async (data: LoginRequest): Promise<LoginResponse> => {
-    const response = await apiClient.post<LoginResponse>('/api/login', data);
+    const response = await apiClient.post<LoginResponse>('/api/auth/login', data);
     const { accessToken } = response.data;
     
     // 토큰 저장
@@ -58,7 +58,7 @@ export const authService = {
 
   // 회원가입
   register: async (data: RegisterRequest): Promise<LoginResponse> => {
-    const response = await apiClient.post<LoginResponse>('/api/register', data);
+    const response = await apiClient.post<LoginResponse>('/api/auth/register', data);
     const { accessToken } = response.data;
     
     tokenManager.setAccessToken(accessToken);

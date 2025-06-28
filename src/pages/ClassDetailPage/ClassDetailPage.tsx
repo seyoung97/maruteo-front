@@ -1,9 +1,9 @@
-import { GarlicIcon, StarRating } from '@/components/Icon';
+import { StarRating } from '@/components/Icon';
+import { CustomBadge } from '@/components/ui/Badge';
 import { Box, Button, Flex, Heading, HStack, Image, Text } from '@chakra-ui/react';
 import { useState } from 'react';
 import { FaPlay } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
-import { CustomBadge } from '@/components/ui/Badge';
 
 // 더미 데이터: 수업, 기부자(뱃지 조건 포함)
 const dummyClasses = [
@@ -58,6 +58,8 @@ const ClassDetailPage = () => {
 
   const giver = dummyGivers.find(g => g.id === cls.giverId);
 
+  //const isBadge = giver && giver.likeCount >= 10 && giver.classCount >= 10 && giver.activeYear >= 1 && giver.readiness === '상' && giver.attendanceRate >= 90;
+
   return (
     <Box p={4}>
       {/* 이미지/영상 영역 */}
@@ -101,7 +103,7 @@ const ClassDetailPage = () => {
       </Box>
       {/* 영상 밑 초록색 박스 */}
       <Box bg="#16A34A" color="white" borderRadius="lg" py={3} px={4} mb={4} display="flex" alignItems="center" justifyContent="space-between">
-        <Text fontWeight="bold" fontSize="lg" isTruncated>{cls.title}</Text>
+        <Text fontWeight="bold" fontSize="lg" truncate>{cls.title}</Text>
         <Flex align="center" gap={3}>
           <Box color="white">
             <StarRating value={cls.rating} size="1.2em" />

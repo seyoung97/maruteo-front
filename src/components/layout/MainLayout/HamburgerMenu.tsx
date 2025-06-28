@@ -146,6 +146,7 @@ const HamburgerMenu = ({ isOpen, onClose }: Props) => {
                 </Accordion.Item>
               </Accordion.Root>
 
+              <Box mt={4} onClick={() => navigate("/login")}>로그인</Box>
               <Box mt={4}>로그아웃</Box>
             </DrawerBody>
 

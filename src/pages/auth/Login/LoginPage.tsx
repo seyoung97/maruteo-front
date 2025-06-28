@@ -57,7 +57,7 @@ export function LoginPage() {
   const handleTestRequest = async () => {
     try {
       console.log('테스트 요청 시작...');
-      const response = await axios.post('https://maruteo-production.up.railway.app/api/login', {
+      const response = await axios.post('https://maruteo-production.up.railway.app/api/auth/login', {
         email: 'hong@example.com',
         password: 'test1234'
       }, {
