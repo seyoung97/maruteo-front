@@ -158,6 +158,12 @@ export interface GetClassDetailResponse {
   };
 }
 
+// 3-1. 수업 신청 
+export interface ApplyClassResponse {
+  success: boolean;
+  message: string;
+}
+
 // 4. 기부자(재능자) 상세 조회
 export interface GetGiverDetailResponse {
   message: string;
@@ -315,7 +321,13 @@ export const getCategoryGiverList = async (id: string) => {
 
 // 3. 수업 상세 조회
 export const getClassDetail = async (id: number) => {
-  const { data } = await apiClient.get<GetClassDetailResponse>(`/lessons/${id}`);
+  const { data } = await apiClient.get<GetClassDetailResponse>(`/api/lesson/lessons/${id}/detail`);
+  return data;
+};
+
+// 3-1. 수업 신청 
+export const applyClass = async (id: number) => {
+  const { data } = await apiClient.post<ApplyClassResponse>(`/api/lesson/lessons/${id}/apply`);
   return data;
 };
 
