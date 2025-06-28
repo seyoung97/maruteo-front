@@ -4,13 +4,13 @@ import {
   Container,
   Heading,
   Input,
-  Select,
   Text,
   Textarea,
   VStack
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { registerClass } from '../../services/classGiverExploreServices';
+import { CommonSelect } from '../Select';
 
 interface RegisterClassFormProps {
   talents: { id: string; name: string }[];
@@ -53,7 +53,7 @@ const RegisterClassForm: React.FC<RegisterClassFormProps> = ({ talents }) => {
         description: form.description,
         location: form.place,
         time: form.unavailable,
-        unavailable: form.unavailable,
+        unavailable: [form.unavailable],
         talentId: form.talentId,
         media_url: form.media ? URL.createObjectURL(form.media) : '',
       };
@@ -61,6 +61,7 @@ const RegisterClassForm: React.FC<RegisterClassFormProps> = ({ talents }) => {
       await registerClass(registerData);
       alert('수업이 성공적으로 등록되었습니다.');
     } catch (error) {
+      console.log(error)
       alert('수업 등록 중 오류가 발생했습니다. 다시 시도해주세요.');
     } finally {
       setSubmitting(false);
@@ -198,48 +199,14 @@ const RegisterClassForm: React.FC<RegisterClassFormProps> = ({ talents }) => {
 
               {/* 관련 재능 선택 */}
               <Box w="full">
-                <Text fontWeight="semibold" color="gray.700" mb="2">
-                  관련 재능
-                </Text>
-                <Button
-                  type="button"
-                  variant="outline"
-                  w="full"
-                  h="48px"
-                  borderColor="gray.300"
-                  color="gray.700"
-                  fontWeight="medium"
-                  borderRadius="lg"
-                  _hover={{ bg: "gray.50", borderColor: "gray.400" }}
-                  onClick={() => setShowTalentSelect(!showTalentSelect)}
-                >
-                  {form.talentId 
-                    ? talents.find(t => t.id === form.talentId)?.name + ' 변경' 
-                    : '관련 재능 선택'
-                  }
-                </Button>
-                
-                {showTalentSelect && (
-                  <Select
-                    name="talentId"
-                    value={form.talentId}
-                    onChange={handleTalentChange}
-                    border="1px solid"
-                    borderColor="gray.300"
-                    borderRadius="lg"
-                    h="48px"
-                    w="full"
-                    _hover={{ borderColor: "gray.400" }}
-                    _focus={{ borderColor: "green.500", boxShadow: "0 0 0 1px #22c55e" }}
-                  >
-                    <option value="">재능을 선택해주세요</option>
-                    {talents.map(talent => (
-                      <option key={talent.id} value={talent.id}>
-                        {talent.name}
-                      </option>
-                    ))}
-                  </Select>
-                )}
+                <CommonSelect
+                  options={talents.map(talent => ({ label: talent.name, value: talent.id }))}
+                  value={form.talentId}
+                  onChange={(value) => setForm({ ...form, talentId: String(value) })}
+                  placeholder="관련 재능을 선택해주세요"
+                  label="관련 재능"
+                  width="100%"
+                />
               </Box>
 
               {/* 수업 등록 버튼 */}

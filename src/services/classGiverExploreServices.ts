@@ -291,7 +291,7 @@ export interface RegisterClassRequest {
 // ===================== API 함수 =====================
 // 1. 수업 목록 조회
 export const getClassList = async (params: GetClassListRequest) => {
-  const { data } = await apiClient.get<GetClassListResponse>('api/lessons', { params });
+  const { data } = await apiClient.get<GetClassListResponse>('api/lesson/lessons', { params });
   return data;
 };
 
@@ -377,5 +377,5 @@ export const registerClass = async (form: RegisterClassRequest) => {
       formData.append(key, String(value));
     }
   });
-  await apiClient.post('/api/lesson', formData);
+  await apiClient.post('/api/lesson/lessons', formData);
 }; 
