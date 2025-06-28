@@ -9,10 +9,10 @@ import { TALENT_CATEGORIES } from "../data/talentData";
 
 // 찜한 수업 더미 데이터
 const likedClasses = [
-  { id: 1, title: '할머니표 마늘닭볶음', thumbnail: '/public/jjimdark.png', garlic: 120, rating: 4.7, badge: '청년', type: 'youth' },
-  { id: 2, title: '의성마늘불고기 배우기', thumbnail: '/public/bulgoki.png', garlic: 98, rating: 4.5, badge: '청년', type: 'youth' },
-  { id: 3, title: '소고기 국밥 배우기', thumbnail: '/public/gukbab.png', garlic: 80, rating: 4.3, badge: '청년', type: 'youth' },
-  { id: 4, title: '의성흑마늘 삼계탕', thumbnail: '/public/chicken.png', garlic: 60, rating: 4.1, badge: '청년', type: 'youth' },
+  { id: 1, title: '할머니표 마늘닭볶음', thumbnail: '/jjimdark.png', garlic: 120, rating: 4.7, badge: '청년', type: 'youth' },
+  { id: 2, title: '의성마늘불고기 배우기', thumbnail: '/bulgoki.png', garlic: 98, rating: 4.5, badge: '청년', type: 'youth' },
+  { id: 3, title: '소고기 국밥 배우기', thumbnail: '/gukbab.png', garlic: 80, rating: 4.3, badge: '청년', type: 'youth' },
+  { id: 4, title: '의성흑마늘 삼계탕', thumbnail: '/chicken.png', garlic: 60, rating: 4.1, badge: '청년', type: 'youth' },
 ];
 
 const HomePage = () => {

@@ -4,11 +4,11 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 // 인기 강사 더미 데이터
 const popularInstructors = [
-  { id: 1, name: '이덕배', image: '/public/elder1.png', rating: 4.8, classCount: 12 },
-  { id: 2, name: '김춘자', image: '/public/choonja.png', rating: 4.7, classCount: 8 },
-  { id: 3, name: '이송자', image: '/public/songja.png', rating: 4.9, classCount: 15 },
-  { id: 4, name: '이영자', image: '/public/youngja.png', rating: 4.6, classCount: 10 },
-  { id: 5, name: '박남식', image: '/public/namsik.png', rating: 4.8, classCount: 11 },
+  { id: 1, name: '이덕배', image: '/elder1.png', rating: 4.8, classCount: 12 },
+  { id: 2, name: '김춘자', image: '/choonja.png', rating: 4.7, classCount: 8 },
+  { id: 3, name: '이송자', image: '/choonja.png', rating: 4.9, classCount: 15 },
+  { id: 4, name: '이영자', image: '/choonja.png', rating: 4.6, classCount: 10 },
+  { id: 5, name: '박남식', image: '/namsik.png', rating: 4.8, classCount: 11 },
 ];
 
 interface PopularInstructorsProps {
