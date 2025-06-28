@@ -1,15 +1,33 @@
-import { Select, createListCollection, Portal } from '@chakra-ui/react';
+import { createListCollection, Portal, Select } from '@chakra-ui/react';
 
-interface CommonSelectProps {
-  options: { label: string; value: string | number }[];
+export interface SelectOption {
+  label: string;
   value: string | number;
-  onChange: (value: string | number) => void;
-  placeholder?: string;
-  size?: 'xs' | 'sm' | 'md' | 'lg';
-  width?: string | number;
 }
 
-const CommonSelect = ({ options, value, onChange, placeholder, size = 'md', width = '200px' }: CommonSelectProps) => {
+interface CommonSelectProps {
+  options: SelectOption[];
+  value?: string | number;
+  onChange: (value: string | number) => void;
+  placeholder?: string;
+  label?: string;
+  size?: 'xs' | 'sm' | 'md' | 'lg';
+  width?: string | number;
+  disabled?: boolean;
+  required?: boolean;
+}
+
+const CommonSelect = ({ 
+  options, 
+  value, 
+  onChange, 
+  placeholder = "선택해주세요", 
+  label,
+  size = 'md', 
+  width = '100%',
+  disabled = false,
+  required = false
+}: CommonSelectProps) => {
   // Chakra v3 방식: collection 생성
   const collection = createListCollection({ items: options });
 
@@ -20,8 +38,11 @@ const CommonSelect = ({ options, value, onChange, placeholder, size = 'md', widt
       onValueChange={({ value }) => onChange(value[0])}
       size={size}
       width={width}
+      disabled={disabled}
+      required={required}
     >
       <Select.HiddenSelect />
+      {label && <Select.Label>{label}</Select.Label>}
       <Select.Control>
         <Select.Trigger>
           <Select.ValueText placeholder={placeholder} />

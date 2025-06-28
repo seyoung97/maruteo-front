@@ -1,15 +1,14 @@
-import { 
-  Box, 
-  Text, 
-  Input,
+import {
+  Box,
   Button,
-  VStack,
-  Container,
-  Flex
+  Flex,
+  Input,
+  Text,
+  VStack
 } from "@chakra-ui/react"
-import { IoArrowBack, IoVolumeHigh, IoMic, IoSend } from "react-icons/io5"
-import { useNavigate } from "react-router-dom"
 import { useState } from "react"
+import { IoArrowBack, IoMic, IoSend, IoVolumeHigh } from "react-icons/io5"
+import { useNavigate } from "react-router-dom"
 
 interface Message {
   id: string
