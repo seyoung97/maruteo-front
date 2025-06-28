@@ -5,7 +5,6 @@ import { Box, Button, SimpleGrid, Spinner, Text } from '@chakra-ui/react';
 import { useAtom } from 'jotai';
 import { useNavigate, useParams } from 'react-router-dom';
 
-
 // 예시 더미 데이터 (category 필드 추가)
 const dummyGivers = [
   { id: 1, name: '김민희', username: '@minii', thumbnail: '/img1.jpg', garlic: 430, rating: 4.8, badge: '청년', type: 'youth', category: '한식', liked: 12, classCount: 11, activeYear: 1.2, readiness: '상', attendanceRate: 92 },

@@ -62,7 +62,7 @@ const CommonCard = ({
           </Box>
         )}
         {typeof garlicCount === 'number' && (
-          <Text fontSize="md" color="gray.700">
+          <Text fontSize="md" color="black">
             🧄 {garlicCount}
           </Text>
         )}

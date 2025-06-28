@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -6,15 +7,23 @@ import {
   Input,
   Text,
   Textarea,
-  VStack
+  VStack,
+  Avatar,
+  Flex
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
 import { registerClass } from '../../services/classGiverExploreServices';
 import { CommonSelect } from '../Select';
 
 interface RegisterClassFormProps {
   talents: { id: string; name: string }[];
 }
+
+// GiverProfile 타입 임시 정의 (실제 타입에 맞게 수정 필요)
+type GiverProfile = {
+  id: string;
+  name: string;
+  // 필요한 필드 추가
+};
 
 const RegisterClassForm: React.FC<RegisterClassFormProps> = ({ talents }) => {
   const [form, setForm] = useState({
@@ -67,6 +76,13 @@ const RegisterClassForm: React.FC<RegisterClassFormProps> = ({ talents }) => {
       setSubmitting(false);
     }
   };
+
+  useEffect(() => {
+    // 실제 API 엔드포인트/파라미터는 명세서 참고
+    fetch('/api/giver/123')
+      .then(res => res.json())
+      .then(data => setGiver(data));
+  }, []);
 
   return (
     <Container 

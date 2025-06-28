@@ -33,7 +33,7 @@ const router = createBrowserRouter(
         <Route index element={<HomePage />} />
       </Route>
       <Route element={<PageLayout/>}>
-        <Route path="giver/:id" element={<GiverDetailPage />} handle={{ getTitle: (params: any) => {
+        <Route path="giver/:id" element={<GiverDetailPage />} handle={{ getTitle: (params: Record<string, string>) => {
           const dummyGivers = [
             { id: 1, username: '@minii' },
             { id: 2, username: '@duckduck' },
@@ -42,7 +42,7 @@ const router = createBrowserRouter(
           return giver ? `${giver.username}` : '';
         }}} />
         <Route path="class/:id" element={<ClassDetailPage />} handle={{ title: "수업 상세 안내" }} />
-        <Route path="class/:id/apply" element={<ClassApplyPage />} />
+        <Route path="class/:id/apply" element={<ClassApplyPage />} handle={{ title: "수업 신청 확인" }} />
         <Route path="class-explore" element={<ClassExplorePage />} handle={{ title: "재능 탐색" }} />
         <Route path="class-explore/:category" element={<ClassExploreCategoryPage />} handle={{ title: ":category" }} />
         <Route path="class-explore/:category/givers" element={<ClassExploreGiverListPage />} handle={{ title: ":category 재능 기부자" }} />

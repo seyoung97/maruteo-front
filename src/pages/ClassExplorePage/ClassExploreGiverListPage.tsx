@@ -5,6 +5,7 @@ import { useRef, useState } from 'react';
 import { LuChevronLeft, LuChevronRight } from 'react-icons/lu';
 import { useParams } from 'react-router-dom';
 
+
 const filterOptions = [
   { label: '최신순', value: 'latest' },
   { label: '인기순', value: 'popular' },

@@ -99,8 +99,9 @@ const dummyClasses = [
 
 const GiverDetailPage = () => {
   const { id } = useParams();
-  const giver = dummyGivers.find(g => String(g.id) === id);
+  const giver = dummyGivers.find((g: { id: number }) => String(g.id) === id);
   const [mainLiked, setMainLiked] = useState<boolean>(false);
+
   const [mainGarlic, setMainGarlic] = useState<number>(giver ? giver.garlic : 0);
   console.log(mainGarlic)
 
@@ -114,7 +115,7 @@ const GiverDetailPage = () => {
     giver.attendanceRate >= 90;
 
   // 해당 기부자가 만든 수업만 필터링
-  const giverClasses = giver ? dummyClasses.filter(cls => cls.giverId === giver.id) : [];
+  const giverClasses = giver ? dummyClasses.filter((cls: { giverId: number }) => cls.giverId === giver.id) : [];
 
   return (
     <Container bg="white" minH="100vh" maxW="480px" px={0} py={0}>
@@ -135,7 +136,6 @@ const GiverDetailPage = () => {
               <Flex gap={2} mt={2}>
                 <CustomBadge type="youth" />
                 {/* 어르신 기부자라면 <CustomBadge type="senior" /> 추가 */}
-                {isBadge && <CustomBadge type="excellent" />}
               </Flex>
               {/* 별점/찜(마늘) 표시 */}
               <Flex align="center" gap={3} mt={2}>
@@ -188,10 +188,8 @@ const GiverDetailPage = () => {
             onClick={() => {
               if (!mainLiked) {
                 setMainLiked(true);
-                setMainGarlic(g => g + 1);
               } else {
                 setMainLiked(false);
-                setMainGarlic(g => Math.max(0, g - 1));
               }
             }}
           >

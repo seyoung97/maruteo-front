@@ -57,6 +57,7 @@ const ClassDetailPage = () => {
   if (!cls) return <Box p={4}>존재하지 않는 수업입니다.</Box>;
 
   const giver = dummyGivers.find(g => g.id === cls.giverId);
+
   //const isBadge = giver && giver.likeCount >= 10 && giver.classCount >= 10 && giver.activeYear >= 1 && giver.readiness === '상' && giver.attendanceRate >= 90;
 
   return (
