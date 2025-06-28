@@ -9,7 +9,6 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import axios from 'axios';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -53,26 +52,6 @@ export function LoginPage() {
   //   // 에러 처리 로직
   // };
 
-  // 테스트 요청 함수
-  const handleTestRequest = async () => {
-    try {
-      console.log('테스트 요청 시작...');
-      const response = await axios.post('https://maruteo-production.up.railway.app/api/auth/login', {
-        email: 'hong@example.com',
-        password: 'test1234'
-      }, {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        withCredentials: true
-      });
-      console.log('테스트 요청 성공:', response.data);
-      alert('테스트 요청 성공! 콘솔을 확인해주세요.');
-    } catch (error) {
-      console.error('테스트 요청 실패:', error);
-      alert('테스트 요청 실패! 콘솔을 확인해주세요.');
-    }
-  };
 
   return (
     <Container 
@@ -221,21 +200,6 @@ export function LoginPage() {
             >
               Kakao로 계속하기
             </Button>
-            
-            {/* 임시 테스트 버튼 */}
-            <Button 
-              onClick={handleTestRequest}
-              bg="red.500"
-              color="white"
-              w="full" 
-              h="48px"
-              fontSize="md"
-              borderRadius="lg"
-              _hover={{ bg: "red.600" }}
-              disabled={loginMutation.isPending}
-            >
-              🧪 axios 테스트 요청
-            </Button>
           </VStack>
           
           {/* 회원가입 링크 */}
@@ -244,7 +208,7 @@ export function LoginPage() {
               계정이 없으신가요?
             </Text>
             <Link 
-              to="/auth/register"
+              to="/register"
               style={{ 
                 color: '#3182ce', 
                 fontSize: '14px', 

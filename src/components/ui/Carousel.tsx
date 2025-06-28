@@ -9,21 +9,21 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 const dummyPopularClasses = [
   {
     id: 1,
-    title: '여름을 향해 걷는 러닝 클래스',
-    description: 'STEP INTO SUMMER',
-    image: '/public/one-month-main.png',
+    title: '의성 마늘 불고기',
+    description: '의성 마늘 불고기',
+    image: '/public/bulgoki.png',
   },
   {
     id: 2,
-    title: '감성 사진 클래스',
-    description: '감성을 담아보세요',
-    image: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308',
+    title: '할머니표 마늘 찜닭',
+    description: '할머니표 마늘 찜닭',
+    image: '/public/jjimdark.png',
   },
   {
     id: 3,
-    title: '홈카페 마스터 클래스',
-    description: '나만의 홈카페',
-    image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb',
+    title: '흑마늘 삼계탕',
+    description: '흑마늘 삼계탕',
+    image: '/public/chicken.png',
   },
 ];
 
