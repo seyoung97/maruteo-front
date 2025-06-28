@@ -1,6 +1,9 @@
+import type { LikeGiverRequest, LikeGiverResponse } from '@/services/classGiverExploreServices';
+import { likeGiver } from '@/services/classGiverExploreServices';
 import { useMutation } from '@tanstack/react-query';
-import { likeGiver, LikeGiverRequest, LikeGiverResponse } from '@/services/classGiverExploreServices';
 
 export const useLikeGiverMutation = () => {
-  return useMutation<LikeGiverResponse, unknown, LikeGiverRequest>(likeGiver);
+  return useMutation<LikeGiverResponse, unknown, LikeGiverRequest>({
+    mutationFn: likeGiver,
+  });
 }; 

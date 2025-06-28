@@ -38,6 +38,40 @@ export interface GetClassListResponse {
   };
 }
 
+// 1-1. 카테고리별 수업 목록 조회
+export interface GetCategoryClassListRequest {
+  category?: string;
+}
+
+export interface GetCategoryClassListResponse {
+  success: boolean;
+  data: {
+    lessons: [
+      {
+        id: number;
+        title: string;
+        description: string;
+        location: string;
+        time: string;
+        image_url: string;
+        instructor_id: number;
+        instructor_name: string;
+        instructor_profile_image: string;
+        application_count: number;
+        wish_count: number;
+        avg_rating: number;
+        review_count: number;
+        created_at: string;
+      }
+    ],
+    total_count: number;
+    page: number;
+    per_page: number;
+    total_pages: number;
+  }
+}
+
+
 // 2. 기부자(재능자) 목록 조회
 export interface GetGiverListRequest {
   role?: string;
@@ -73,6 +107,32 @@ export interface GetGiverListResponse {
     has_prev: boolean;
   };
 }
+
+// 2-1. 카테고리별 기부자 목록 조회
+export interface GetCategoryGiverListResponse {
+    success: boolean;
+  data: {
+    instructors: [
+        {
+        id: number;
+        name: string;
+        username: string;
+        profile_image: string;
+        bio: string;
+        avg_rating: number;
+        review_count: number;
+        total_wish_count: number;
+        total_application_count: number;
+        lesson_count: number;
+        latest_lesson_date: string;
+      }
+      ],
+    total_count: number;
+    page: number;
+    per_page: number;
+    total_pages: number;
+  }  
+};
 
 // 3. 수업 상세 조회
 export interface GetClassDetailResponse {
@@ -209,16 +269,47 @@ export interface TalentListResponse {
   }>;
 }
 
+// 내가 등록한 재능 목록 조회
+export interface MyTalentsResponse {
+  message: string;
+  data: Array<{
+    id: string;
+    name: string;
+  }>;
+}
+
+// 10. 수업 등록
+export interface RegisterClassRequest {
+  title: string;
+  description: string;
+  location: string;
+  time: string;
+  unavailable: string[];
+  media_url:string;
+};
+
 // ===================== API 함수 =====================
 // 1. 수업 목록 조회
 export const getClassList = async (params: GetClassListRequest) => {
-  const { data } = await apiClient.get<GetClassListResponse>('/lessons', { params });
+  const { data } = await apiClient.get<GetClassListResponse>('api/lessons', { params });
+  return data;
+};
+
+// 1-1. 카테고리별 수업 목록 조회
+export const getCategoryClassList = async (id: string) => {
+  const { data } = await apiClient.get<GetCategoryClassListResponse>(`api/talent-exploration/${id}/lessons`);
   return data;
 };
 
 // 2. 기부자(재능자) 목록 조회
 export const getGiverList = async (params: GetGiverListRequest) => {
   const { data } = await apiClient.get<GetGiverListResponse>('/users', { params });
+  return data;
+};
+
+// 2-1. 카테고리별 기부자 목록 조회
+export const getCategoryGiverList = async (id: string) => {
+  const { data } = await apiClient.get<GetCategoryGiverListResponse>(`api/talent-exploration/${id}/instructors`);
   return data;
 };
 
@@ -265,8 +356,8 @@ export const getTalentList = async () => {
 };
 
 // 내가 등록한 재능 목록 불러오기
-export const getMyTalents = async () => {
-  const res = await apiClient.get('/my-talents');
+export const getMyTalents = async (): Promise<MyTalentsResponse> => {
+  const res = await apiClient.get<MyTalentsResponse>('/my-talents');
   return res.data;
 };
 
@@ -277,7 +368,7 @@ export const getMyLessons = async () => {
 };
 
 // 수업 등록
-export const registerClass = async (form: any) => {
+export const registerClass = async (form: RegisterClassRequest) => {
   const formData = new FormData();
   Object.entries(form).forEach(([key, value]) => {
     if (value instanceof File) {
@@ -286,5 +377,5 @@ export const registerClass = async (form: any) => {
       formData.append(key, String(value));
     }
   });
-  await apiClient.post('/classes', formData);
+  await apiClient.post('/api/lesson', formData);
 }; 

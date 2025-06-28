@@ -1,21 +1,22 @@
 import { MainLayout } from '@/components/layout/MainLayout';
 import { PageLayout } from '@/components/layout/PageLayout';
+import AdminMainPage from '@/pages/admin/AdminMainPage';
 import { LoginPage, ProfilePage, RegisterPage } from '@/pages/auth';
 import { RegisterLearningTalentPage, RegisterTalentPage } from '@/pages/auth/Profile';
 import { ChatConversationPage, ChatPage } from '@/pages/ChatPage';
+import ClassApplyPage from '@/pages/ClassApplyPage/ClassApplyPage';
 import ClassDetailPage from '@/pages/ClassDetailPage/ClassDetailPage';
 import { ClassExploreCategoryPage, ClassExploreClassListPage, ClassExploreGiverListPage, ClassExplorePage } from '@/pages/ClassExplorePage';
+import { RegisterClassPage } from '@/pages/ClassRegisterPage';
 import { GiverDetailPage } from '@/pages/GiverDetailPage';
 import HomePage from '@/pages/HomePage';
 import {
-  OneMonthMainPage,
   OneMonthApplyPage,
+  OneMonthCompletePage,
+  OneMonthMainPage,
   OneMonthTalentRegisterPage,
-  OneMonthWantTalentPage,
-  OneMonthCompletePage
+  OneMonthWantTalentPage
 } from '@/pages/OneMonthPage';
-import { RegisterClassPage } from '@/pages/ClassRegisterPage';
-import ClassApplyPage from '@/pages/ClassApplyPage/ClassApplyPage';
 import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
 
 const router = createBrowserRouter(
@@ -54,6 +55,7 @@ const router = createBrowserRouter(
       {/* Chat 관련 페이지들은 상단바/하단바 없이 풀스크린 */}
       <Route path='chat' element={<ChatPage/>}/>
       <Route path='chat/conversation' element={<ChatConversationPage/>}/>
+      <Route path='admin' element={<AdminMainPage/>}/>
     </>
   )
 );

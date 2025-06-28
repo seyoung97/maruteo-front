@@ -6,4 +6,5 @@ export { default as useUnmount } from './useUnmount';
 export { default as useUpdateEffect } from './useUpdateEffect';
 
 export * from './auth';
+export * from './classGiverExplore';
 

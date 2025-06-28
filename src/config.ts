@@ -18,4 +18,6 @@ const getConfig = (name: string, defaultValue?: string) => {
 export default {
   ENV: getConfig('ENV', 'development'),
   API_URL: getConfig('API_URL', 'http://localhost:5000'),
+  GOOGLE_CLIENT_ID: getConfig('GOOGLE_CLIENT_ID'),
+  GOOGLE_API_KEY: getConfig('GOOGLE_API_KEY'),
 };

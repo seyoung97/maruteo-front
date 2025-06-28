@@ -1,10 +1,12 @@
 import { Flex, IconButton } from '@chakra-ui/react';
 import { GoHome } from "react-icons/go";
 import { IoChatbubbleEllipsesOutline, IoPerson, IoSearchOutline } from "react-icons/io5";
+import { useNavigate } from 'react-router-dom';
 
 
 
 export const Footer = () => {
+  const navigate = useNavigate();
   return (
     <Flex
       as="footer"
@@ -22,6 +24,7 @@ export const Footer = () => {
       aria-label="Home"
       size="sm"
       variant="ghost" 
+      onClick={() => navigate('/')}
       >
         <GoHome/>
       </IconButton>
@@ -29,6 +32,7 @@ export const Footer = () => {
       aria-label="Home"
       size="sm"
       variant="ghost" 
+      onClick={() => navigate('/chat')}
       >
         <IoChatbubbleEllipsesOutline/>
       </IconButton>
@@ -36,6 +40,7 @@ export const Footer = () => {
       aria-label="Home"
       size="sm"
       variant="ghost" 
+      onClick={() => navigate('/class-explore')}
       >
         <IoSearchOutline/>
       </IconButton>
@@ -43,6 +48,7 @@ export const Footer = () => {
       aria-label="Home"
       size="sm"
       variant="ghost" 
+      onClick={() => navigate('/profile')}
       >
         <IoPerson/>
       </IconButton>    

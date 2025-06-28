@@ -1,5 +1,8 @@
+import { userAtom } from '@/atoms/authAtoms';
 import { CommonCard } from '@/components/Card';
-import { Box, Button, SimpleGrid } from '@chakra-ui/react';
+import { useClassExploreQuery } from '@/hooks/classGiverExplore';
+import { Box, Button, SimpleGrid, Spinner, Text } from '@chakra-ui/react';
+import { useAtom } from 'jotai';
 import { useNavigate, useParams } from 'react-router-dom';
 
 // 예시 더미 데이터 (category 필드 추가)
@@ -10,22 +13,47 @@ const dummyGivers = [
   { id: 4, name: '이준학', username: '@ji-chef', thumbnail: '/img4.jpg', garlic: 160, rating: 5.0, badge: '청년', type: 'youth', category: '한식', liked: 5, classCount: 10, activeYear: 0.5, readiness: '하', attendanceRate: 80 },
   { id: 5, name: '이은지', username: '@dokja', thumbnail: '/img5.jpg', garlic: 70, rating: 3.9, badge: '어르신', type: 'senior', category: '중식', liked: 20, classCount: 15, activeYear: 1.5, readiness: '상', attendanceRate: 98 },
 ];
-const dummyClasses = [
-  { id: 1, title: '마늘닭볶음', thumbnail: '/class1.jpg', garlic: 120, rating: 4.7, badge: '청년', type: 'youth', category: '한식' },
-  { id: 2, title: '의성마늘불고기 배우기', thumbnail: '/class2.jpg', garlic: 98, rating: 4.5, badge: '청년', type: 'youth', category: '한식' },
-  { id: 3, title: '갈릭파스타 클래스', thumbnail: '/class3.jpg', garlic: 80, rating: 4.3, badge: '청년', type: 'youth', category: '한식' },
-  { id: 4, title: '김치찌개 클래스', thumbnail: '/class4.jpg', garlic: 60, rating: 4.1, badge: '청년', type: 'youth', category: '한식' },
-  { id: 5, title: '중식 볶음밥 클래스', thumbnail: '/class5.jpg', garlic: 50, rating: 3.8, badge: '어르신', type: 'senior', category: '중식' },
-];
 
 // 카테고리별 기부자/수업 미리보기 페이지 - 4+4 카드, 더보기 버튼
 const ClassExploreCategoryPage = () => {
   const { category } = useParams();
+  const [user] = useAtom(userAtom);
   const navigate = useNavigate();
+  
+  // 사용자 타입에 따라 instructor_role 결정
+  const instructorRole = user?.userType === 'young' ? 'young' : 'elder';
+  
+  // 카테고리별 수업 데이터 가져오기
+  //const { data: categoryClassData, isLoading, error } = useCategoryClassListQuery(category || '');
+  const { data, isLoading, error } = useClassExploreQuery({
+    category: category || "",
+    instructor_role: instructorRole, // Jotai에서 가져온 사용자 타입 사용
+    sort: "latest",
+    page: 1,
+    limit: 4
+  });
 
-  // 카테고리별 데이터 필터링
+  // 카테고리별 기부자 데이터 필터링 (기존 더미 데이터 사용)
   const filteredGivers = dummyGivers.filter(g => g.category === category).slice(0, 4);
-  const filteredClasses = dummyClasses.filter(c => c.category === category).slice(0, 4);
+  
+  // API에서 가져온 수업 데이터 사용 (최대 4개)
+ // const filteredClasses = data?.data?.lessons?.slice(0, 4) || [];
+
+  if (isLoading) {
+    return (
+      <Box p={4} display="flex" justifyContent="center" alignItems="center" minH="200px">
+        <Spinner size="lg" />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box p={4} textAlign="center" color="red.500">
+        수업 데이터를 불러올 수 없습니다.
+      </Box>
+    );
+  }
 
   return (
     <Box p={4}>
@@ -59,18 +87,23 @@ const ClassExploreCategoryPage = () => {
 
       <Box fontWeight="bold" fontSize="lg" mb={2}>{category} 수업</Box>
       <SimpleGrid columns={2} gap={4} mb={4}>
-        {filteredClasses.map(cls => (
-          <CommonCard
-            key={cls.id}
-            thumbnail={cls.thumbnail}
-            title={cls.title}
-            garlicCount={cls.garlic}
-            rating={cls.rating}
-            badgeText={cls.badge}
-            type={cls.type}
-            onClick={() => navigate(`/class/${cls.id}`)}
-          />
-        ))}
+        {data?.data?.length && data?.data?.length > 0 ? (
+          data?.data.map((cls) => (
+            <CommonCard
+              key={cls.id}
+              thumbnail={cls.thumbnail}
+              title={cls.title}
+              subtitle={cls.description}
+              garlicCount={cls.garlic_count}
+              rating={cls.rating}
+              onClick={() => navigate(`/class/${cls.id}`)}
+            />
+          ))
+        ) : (
+          <Text color="gray.500" textAlign="center" gridColumn="span 2" py={8}>
+            해당 카테고리의 수업이 없습니다.
+          </Text>
+        )}
       </SimpleGrid>
       <Button w="full" colorPalette="green" onClick={() => navigate(`/class-explore/${category}/classes`)}>수업 더보기</Button>
     </Box>
