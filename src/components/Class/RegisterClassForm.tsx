@@ -1,3 +1,14 @@
+import {
+  Box,
+  Button,
+  Container,
+  Heading,
+  Input,
+  Select,
+  Text,
+  Textarea,
+  VStack
+} from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { registerClass } from '../../services/classGiverExploreServices';
 
@@ -35,58 +46,228 @@ const RegisterClassForm: React.FC<RegisterClassFormProps> = ({ talents }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
-    await registerClass(form);
-    setSubmitting(false);
-    // TODO: 등록 후 마이페이지로 이동 또는 알림
+    
+    try {
+      const registerData = {
+        title: form.title,
+        description: form.description,
+        location: form.place,
+        time: form.unavailable,
+        unavailable: form.unavailable,
+        talentId: form.talentId,
+        media_url: form.media ? URL.createObjectURL(form.media) : '',
+      };
+      
+      await registerClass(registerData);
+      alert('수업이 성공적으로 등록되었습니다.');
+    } catch (error) {
+      alert('수업 등록 중 오류가 발생했습니다. 다시 시도해주세요.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ maxWidth: 400, margin: '0 auto', background: '#fff', padding: 24, borderRadius: 16 }}>
-      <h2 style={{ marginBottom: 16 }}>수업 등록</h2>
-      {/* 홍보 미디어 */}
-      <div style={{ marginBottom: 16 }}>
-        <label style={{ fontWeight: 600, display: 'block', marginBottom: 4 }}>홍보 영상/사진</label>
-        <input type="file" accept="image/*,video/*" onChange={handleMediaChange} />
-      </div>
-      {/* 수업명 */}
-      <div style={{ marginBottom: 16 }}>
-        <label style={{ fontWeight: 600, display: 'block', marginBottom: 4 }}>수업명</label>
-        <input name="title" value={form.title} onChange={handleChange} placeholder="수업명" style={{ width: '100%' }} required />
-      </div>
-      {/* 수업 설명 */}
-      <div style={{ marginBottom: 16 }}>
-        <label style={{ fontWeight: 600, display: 'block', marginBottom: 4 }}>수업 설명</label>
-        <textarea name="description" value={form.description} onChange={handleChange} placeholder="수업 설명" style={{ width: '100%' }} required />
-      </div>
-      {/* 희망 장소 */}
-      <div style={{ marginBottom: 16 }}>
-        <label style={{ fontWeight: 600, display: 'block', marginBottom: 4 }}>희망 장소</label>
-        <input name="place" value={form.place} onChange={handleChange} placeholder="희망 장소" style={{ width: '100%' }} />
-      </div>
-      {/* 안되는 요일/시간 */}
-      <div style={{ marginBottom: 16 }}>
-        <label style={{ fontWeight: 600, display: 'block', marginBottom: 4 }}>안되는 요일/시간</label>
-        <input name="unavailable" value={form.unavailable} onChange={handleChange} placeholder="예: 월요일 오전, 금요일 오후" style={{ width: '100%' }} />
-      </div>
-      {/* 관련 재능 선택 */}
-      <div style={{ marginBottom: 16 }}>
-        <label style={{ fontWeight: 600, display: 'block', marginBottom: 4 }}>관련 재능</label>
-        <button type="button" style={{ marginBottom: 8, background: '#B6E2B6', color: '#222', padding: '6px 12px', borderRadius: 8, border: 'none', fontWeight: 600 }} onClick={() => setShowTalentSelect(!showTalentSelect)}>
-          {form.talentId ? talents.find(t => t.id === form.talentId)?.name + ' 변경' : '관련 재능 선택'}
-        </button>
-        {showTalentSelect && (
-          <select name="talentId" value={form.talentId} onChange={handleTalentChange} style={{ width: '100%', marginBottom: 8 }} required>
-            <option value="">재능 선택</option>
-            {talents.map(talent => (
-              <option key={talent.id} value={talent.id}>{talent.name}</option>
-            ))}
-          </select>
-        )}
-      </div>
-      <button type="submit" disabled={submitting} style={{ width: '100%', background: '#B6E2B6', color: '#222', padding: 12, borderRadius: 8 }}>
-        {submitting ? '등록 중...' : '수업 등록'}
-      </button>
-    </form>
+    <Container 
+      bg="white" 
+      minH="100vh" 
+      maxW="600px"
+      px="4"
+      style={{ backgroundColor: 'white' }}
+    >
+      <VStack gap="8" justify="center" minH="100vh">
+        {/* 헤더 */}
+        <VStack gap="3" textAlign="center" pt="8">
+          <Heading size="xl" color="gray.800" fontWeight="bold">
+            수업 등록
+          </Heading>
+          <Text color="gray.600" fontSize="md">
+            새로운 수업을 등록해보세요
+          </Text>
+        </VStack>
+        
+        {/* 수업 등록 폼 */}
+        <Box w="full" p="6">
+          <form onSubmit={handleSubmit}>
+            <VStack gap="6" w="full">
+              {/* 홍보 미디어 */}
+              <Box w="full">
+                <Text fontWeight="semibold" color="gray.700" mb="2">
+                  홍보 영상/사진
+                </Text>
+                <Input
+                  type="file"
+                  accept="image/*,video/*"
+                  onChange={handleMediaChange}
+                  border="1px solid"
+                  borderColor="gray.300"
+                  borderRadius="lg"
+                  p="2"
+                  w="full"
+                  _hover={{ borderColor: "gray.400" }}
+                  _focus={{ borderColor: "green.500", boxShadow: "0 0 0 1px #22c55e" }}
+                />
+                <Text color="gray.500" fontSize="sm" mt="1">
+                  수업을 홍보할 영상이나 사진을 업로드해주세요
+                </Text>
+              </Box>
+
+              {/* 수업명 */}
+              <Box w="full">
+                <Text fontWeight="semibold" color="gray.700" mb="2">
+                  수업명
+                </Text>
+                <Input
+                  name="title"
+                  value={form.title}
+                  onChange={handleChange}
+                  placeholder="수업명을 입력하세요"
+                  border="1px solid"
+                  borderColor="gray.300"
+                  borderRadius="lg"
+                  h="48px"
+                  w="full"
+                  _hover={{ borderColor: "gray.400" }}
+                  _focus={{ borderColor: "green.500", boxShadow: "0 0 0 1px #22c55e" }}
+                />
+              </Box>
+
+              {/* 수업 설명 */}
+              <Box w="full">
+                <Text fontWeight="semibold" color="gray.700" mb="2">
+                  수업 설명
+                </Text>
+                <Textarea
+                  name="description"
+                  value={form.description}
+                  onChange={handleChange}
+                  placeholder="수업에 대한 자세한 설명을 입력하세요"
+                  border="1px solid"
+                  borderColor="gray.300"
+                  borderRadius="lg"
+                  minH="120px"
+                  resize="vertical"
+                  w="full"
+                  _hover={{ borderColor: "gray.400" }}
+                  _focus={{ borderColor: "green.500", boxShadow: "0 0 0 1px #22c55e" }}
+                />
+              </Box>
+
+              {/* 희망 장소 */}
+              <Box w="full">
+                <Text fontWeight="semibold" color="gray.700" mb="2">
+                  희망 장소
+                </Text>
+                <Input
+                  name="place"
+                  value={form.place}
+                  onChange={handleChange}
+                  placeholder="수업을 진행할 희망 장소"
+                  border="1px solid"
+                  borderColor="gray.300"
+                  borderRadius="lg"
+                  h="48px"
+                  w="full"
+                  _hover={{ borderColor: "gray.400" }}
+                  _focus={{ borderColor: "green.500", boxShadow: "0 0 0 1px #22c55e" }}
+                />
+              </Box>
+
+              {/* 안되는 요일/시간 */}
+              <Box w="full">
+                <Text fontWeight="semibold" color="gray.700" mb="2">
+                  안되는 요일/시간
+                </Text>
+                <Input
+                  name="unavailable"
+                  value={form.unavailable}
+                  onChange={handleChange}
+                  placeholder="예: 월요일 오전, 금요일 오후"
+                  border="1px solid"
+                  borderColor="gray.300"
+                  borderRadius="lg"
+                  h="48px"
+                  w="full"
+                  _hover={{ borderColor: "gray.400" }}
+                  _focus={{ borderColor: "green.500", boxShadow: "0 0 0 1px #22c55e" }}
+                />
+                <Text color="gray.500" fontSize="sm" mt="1">
+                  수업을 진행할 수 없는 요일이나 시간을 입력해주세요
+                </Text>
+              </Box>
+
+              {/* 관련 재능 선택 */}
+              <Box w="full">
+                <Text fontWeight="semibold" color="gray.700" mb="2">
+                  관련 재능
+                </Text>
+                <Button
+                  type="button"
+                  variant="outline"
+                  w="full"
+                  h="48px"
+                  borderColor="gray.300"
+                  color="gray.700"
+                  fontWeight="medium"
+                  borderRadius="lg"
+                  _hover={{ bg: "gray.50", borderColor: "gray.400" }}
+                  onClick={() => setShowTalentSelect(!showTalentSelect)}
+                >
+                  {form.talentId 
+                    ? talents.find(t => t.id === form.talentId)?.name + ' 변경' 
+                    : '관련 재능 선택'
+                  }
+                </Button>
+                
+                {showTalentSelect && (
+                  <Select
+                    name="talentId"
+                    value={form.talentId}
+                    onChange={handleTalentChange}
+                    border="1px solid"
+                    borderColor="gray.300"
+                    borderRadius="lg"
+                    h="48px"
+                    w="full"
+                    _hover={{ borderColor: "gray.400" }}
+                    _focus={{ borderColor: "green.500", boxShadow: "0 0 0 1px #22c55e" }}
+                  >
+                    <option value="">재능을 선택해주세요</option>
+                    {talents.map(talent => (
+                      <option key={talent.id} value={talent.id}>
+                        {talent.name}
+                      </option>
+                    ))}
+                  </Select>
+                )}
+              </Box>
+
+              {/* 수업 등록 버튼 */}
+              <Button
+                type="submit"
+                bg="green.500"
+                color="white"
+                w="full"
+                h="48px"
+                fontSize="md"
+                fontWeight="semibold"
+                borderRadius="lg"
+                _hover={{ 
+                  bg: "green.600",
+                  transform: "translateY(-1px)", 
+                  boxShadow: "lg" 
+                }}
+                transition="all 0.2s"
+                disabled={submitting}
+                mt="4"
+              >
+                {submitting ? '등록 중...' : '수업 등록'}
+              </Button>
+            </VStack>
+          </form>
+        </Box>
+      </VStack>
+    </Container>
   );
 };
 

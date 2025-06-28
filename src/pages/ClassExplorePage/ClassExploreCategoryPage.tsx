@@ -1,6 +1,8 @@
+import { userAtom } from '@/atoms/authAtoms';
 import { CommonCard } from '@/components/Card';
-import { useCategoryClassListQuery } from '@/hooks/classGiverExplore';
+import { useClassExploreQuery } from '@/hooks/classGiverExplore';
 import { Box, Button, SimpleGrid, Spinner, Text } from '@chakra-ui/react';
+import { useAtom } from 'jotai';
 import { useNavigate, useParams } from 'react-router-dom';
 
 
@@ -16,16 +18,27 @@ const dummyGivers = [
 // 카테고리별 기부자/수업 미리보기 페이지 - 4+4 카드, 더보기 버튼
 const ClassExploreCategoryPage = () => {
   const { category } = useParams();
+  const [user] = useAtom(userAtom);
   const navigate = useNavigate();
-
+  
+  // 사용자 타입에 따라 instructor_role 결정
+  const instructorRole = user?.userType === 'young' ? 'young' : 'elder';
+  
   // 카테고리별 수업 데이터 가져오기
-  const { data: categoryClassData, isLoading, error } = useCategoryClassListQuery(category || '');
+  //const { data: categoryClassData, isLoading, error } = useCategoryClassListQuery(category || '');
+  const { data, isLoading, error } = useClassExploreQuery({
+    category: category || "",
+    instructor_role: instructorRole, // Jotai에서 가져온 사용자 타입 사용
+    sort: "latest",
+    page: 1,
+    limit: 4
+  });
 
   // 카테고리별 기부자 데이터 필터링 (기존 더미 데이터 사용)
   const filteredGivers = dummyGivers.filter(g => g.category === category).slice(0, 4);
   
   // API에서 가져온 수업 데이터 사용 (최대 4개)
-  const filteredClasses = categoryClassData?.data?.lessons?.slice(0, 4) || [];
+ // const filteredClasses = data?.data?.lessons?.slice(0, 4) || [];
 
   if (isLoading) {
     return (
@@ -75,22 +88,15 @@ const ClassExploreCategoryPage = () => {
 
       <Box fontWeight="bold" fontSize="lg" mb={2}>{category} 수업</Box>
       <SimpleGrid columns={2} gap={4} mb={4}>
-        {filteredClasses.length > 0 ? (
-          filteredClasses.map((cls: {
-            id: number;
-            title: string;
-            description: string;
-            image_url: string;
-            wish_count: number;
-            avg_rating: number;
-          }) => (
+        {data?.data?.length && data?.data?.length > 0 ? (
+          data?.data.map((cls) => (
             <CommonCard
               key={cls.id}
-              thumbnail={cls.image_url}
+              thumbnail={cls.thumbnail}
               title={cls.title}
               subtitle={cls.description}
-              garlicCount={cls.wish_count}
-              rating={cls.avg_rating}
+              garlicCount={cls.garlic_count}
+              rating={cls.rating}
               onClick={() => navigate(`/class/${cls.id}`)}
             />
           ))

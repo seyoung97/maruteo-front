@@ -269,6 +269,15 @@ export interface TalentListResponse {
   }>;
 }
 
+// 내가 등록한 재능 목록 조회
+export interface MyTalentsResponse {
+  message: string;
+  data: Array<{
+    id: string;
+    name: string;
+  }>;
+}
+
 // 10. 수업 등록
 export interface RegisterClassRequest {
   title: string;
@@ -282,7 +291,7 @@ export interface RegisterClassRequest {
 // ===================== API 함수 =====================
 // 1. 수업 목록 조회
 export const getClassList = async (params: GetClassListRequest) => {
-  const { data } = await apiClient.get<GetClassListResponse>('/lessons', { params });
+  const { data } = await apiClient.get<GetClassListResponse>('api/lessons', { params });
   return data;
 };
 
@@ -347,8 +356,8 @@ export const getTalentList = async () => {
 };
 
 // 내가 등록한 재능 목록 불러오기
-export const getMyTalents = async () => {
-  const res = await apiClient.get('/my-talents');
+export const getMyTalents = async (): Promise<MyTalentsResponse> => {
+  const res = await apiClient.get<MyTalentsResponse>('/my-talents');
   return res.data;
 };
 
