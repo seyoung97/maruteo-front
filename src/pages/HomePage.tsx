@@ -3,6 +3,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { CommonCard } from '../components/Card';
+import { PopularInstructors } from '../components/ui';
 import Carousel from '../components/ui/Carousel';
 import { TALENT_CATEGORIES } from "../data/talentData";
 
@@ -76,6 +77,9 @@ const HomePage = () => {
             />
           ))}
         </SimpleGrid>
+        
+        {/* 인기 강사 섹션 */}
+        <PopularInstructors />
       </Container>
       
     </Box>
