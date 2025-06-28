@@ -11,19 +11,19 @@ const dummyPopularClasses = [
     id: 1,
     title: '의성 마늘 불고기',
     description: '의성 마늘 불고기',
-    image: '/public/bulgoki.png',
+    image: '/bulgoki.png',
   },
   {
     id: 2,
     title: '할머니표 마늘 찜닭',
     description: '할머니표 마늘 찜닭',
-    image: '/public/jjimdark.png',
+    image: '/jjimdark.png',
   },
   {
     id: 3,
     title: '흑마늘 삼계탕',
     description: '흑마늘 삼계탕',
-    image: '/public/chicken.png',
+    image: '/chicken.png',
   },
 ];
 
